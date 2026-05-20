@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Audit {
+  id             Int      @id @default(autoincrement())
+  tool           String
+  plan           String
+  monthlySpend   Int
+  seats          Int
+  teamSize       Int
+  useCase        String
+  recommendation String
+  savings        Int
+  createdAt      DateTime @default(now())
+}
