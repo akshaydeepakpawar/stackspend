@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "lib/schema.js", "lib/audit-engine.js", "lib/prisma.js", "app/api/audits/route.js", "components/spend-form.jsx"  ],
   "exclude": ["node_modules"]
 }

@@ -1,17 +1,27 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import { useForm } from "react-hook-form";
+
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { auditSchema } from "@/lib/schema";
+
 import { generateAudit } from "@/lib/audit-engine";
 
-import { auditSchema, AuditSchemaType } from "@/lib/schema";
-
-import { useState } from "react";
-
 export default function SpendForm() {
-  const { register, handleSubmit, watch, setValue } = useForm<AuditSchemaType>({
+
+  const [auditResult, setAuditResult] = useState(null);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+  } = useForm({
     resolver: zodResolver(auditSchema),
+
     defaultValues: {
       tool: "ChatGPT",
       plan: "Plus",
@@ -22,14 +32,15 @@ export default function SpendForm() {
     },
   });
 
-  // Persist form to localStorage
   const watchedValues = watch();
 
   useEffect(() => {
-    localStorage.setItem("audit-form", JSON.stringify(watchedValues));
+    localStorage.setItem(
+      "audit-form",
+      JSON.stringify(watchedValues)
+    );
   }, [watchedValues]);
 
-  // Load saved form
   useEffect(() => {
     const saved = localStorage.getItem("audit-form");
 
@@ -37,25 +48,24 @@ export default function SpendForm() {
       const parsed = JSON.parse(saved);
 
       Object.entries(parsed).forEach(([key, value]) => {
-        setValue(key as keyof AuditSchemaType, value as never);
+        setValue(key, value);
       });
     }
   }, [setValue]);
 
-  const [auditResult, setAuditResult] = useState<{
-    recommendation: string;
-    savings: number;
-    reason: string;
-  } | null>(null);
+  const onSubmit = async (data) => {
 
-  const onSubmit = async (data: AuditSchemaType) => {
     const result = generateAudit(data);
+
     setAuditResult(result);
+
     await fetch("/api/audits", {
       method: "POST",
+
       headers: {
         "Content-Type": "application/json",
       },
+
       body: JSON.stringify({
         ...data,
         recommendation: result.recommendation,
@@ -65,10 +75,18 @@ export default function SpendForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-w-xl">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-4 max-w-xl"
+    >
+
       <div>
         <label>Tool</label>
-        <select {...register("tool")} className="w-full border p-2 rounded">
+
+        <select
+          {...register("tool")}
+          className="w-full border p-2 rounded"
+        >
           <option>ChatGPT</option>
           <option>Claude</option>
           <option>Cursor</option>
@@ -79,11 +97,16 @@ export default function SpendForm() {
 
       <div>
         <label>Plan</label>
-        <input {...register("plan")} className="w-full border p-2 rounded" />
+
+        <input
+          {...register("plan")}
+          className="w-full border p-2 rounded"
+        />
       </div>
 
       <div>
         <label>Monthly Spend</label>
+
         <input
           type="number"
           {...register("monthlySpend")}
@@ -93,6 +116,7 @@ export default function SpendForm() {
 
       <div>
         <label>Seats</label>
+
         <input
           type="number"
           {...register("seats")}
@@ -102,6 +126,7 @@ export default function SpendForm() {
 
       <div>
         <label>Team Size</label>
+
         <input
           type="number"
           {...register("teamSize")}
@@ -111,7 +136,11 @@ export default function SpendForm() {
 
       <div>
         <label>Use Case</label>
-        <select {...register("useCase")} className="w-full border p-2 rounded">
+
+        <select
+          {...register("useCase")}
+          className="w-full border p-2 rounded"
+        >
           <option value="coding">Coding</option>
           <option value="writing">Writing</option>
           <option value="research">Research</option>
@@ -120,26 +149,38 @@ export default function SpendForm() {
         </select>
       </div>
 
-      <button type="submit" className="bg-black text-white px-4 py-2 rounded">
+      <button
+        type="submit"
+        className="bg-black text-white px-4 py-2 rounded"
+      >
         Generate Audit
       </button>
+
       {auditResult && (
         <div className="border rounded p-4 mt-6">
-          <h2 className="text-2xl font-bold mb-2">Audit Result</h2>
+
+          <h2 className="text-2xl font-bold mb-2">
+            Audit Result
+          </h2>
 
           <p>
-            <strong>Recommendation:</strong> {auditResult.recommendation}
+            <strong>Recommendation:</strong>{" "}
+            {auditResult.recommendation}
           </p>
 
           <p>
-            <strong>Monthly Savings:</strong> ${auditResult.savings}
+            <strong>Monthly Savings:</strong> $
+            {auditResult.savings}
           </p>
 
           <p>
-            <strong>Reason:</strong> {auditResult.reason}
+            <strong>Reason:</strong>{" "}
+            {auditResult.reason}
           </p>
+
         </div>
       )}
+
     </form>
   );
 }
