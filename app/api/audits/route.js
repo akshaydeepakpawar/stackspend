@@ -7,19 +7,26 @@ export async function POST(req) {
 
     const audit = await prisma.audit.create({
       data: {
-        tool: body.tool,
-        plan: body.plan,
-        monthlySpend: body.monthlySpend,
-        seats: body.seats,
         teamSize: body.teamSize,
         useCase: body.useCase,
         recommendation: body.recommendation,
         savings: body.savings,
+
+        tools: {
+          create: body.tools.map((tool) => ({
+            tool: tool.tool,
+            plan: tool.plan,
+            monthlySpend: Number(tool.monthlySpend),
+            seats: Number(tool.seats),
+          })),
+        },
+      },
+      include: {
+        tools: true,
       },
     });
 
     return NextResponse.json(audit);
-
   } catch (error) {
     console.error(error);
 

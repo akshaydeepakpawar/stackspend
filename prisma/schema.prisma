@@ -8,14 +8,23 @@ datasource db {
 }
 
 model Audit {
-  id             Int      @id @default(autoincrement())
-  tool           String
-  plan           String
-  monthlySpend   Int
-  seats          Int
+  id             String   @id @default(cuid())
   teamSize       Int
   useCase        String
   recommendation String
   savings        Int
   createdAt      DateTime @default(now())
+
+  tools          Tool[]
+}
+
+model Tool {
+  id           String @id @default(cuid())
+  tool         String
+  plan         String
+  monthlySpend Int
+  seats        Int
+
+  auditId String
+  audit   Audit @relation(fields: [auditId], references: [id], onDelete: Cascade)
 }
