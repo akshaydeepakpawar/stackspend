@@ -22,3 +22,36 @@
 - Improve audit result UI
 - Add support for multiple tools and plans
 - Start implementing dynamic pricing logic
+
+## Day 2 — 2026-05-21
+
+**Hours worked:** 5
+
+**What I did:**
+- Refactored the spend input form to support multiple AI tools using React Hook Form's useFieldArray.
+- Upgraded the audit engine from a single recommendation model to a recommendation-based report structure with monthly and annual savings calculations.
+- Added recommendation cards and a savings dashboard to improve the audit results experience.
+- Created an audit history page that displays previously generated audits from the database.
+- Redesigned the Prisma schema to support storing complete audit reports and related tool records.
+- Implemented a one-to-many relationship between audits and tools in Prisma.
+- Migrated database development from Neon PostgreSQL to a local PostgreSQL 16 Docker container.
+- Updated Prisma configuration and synchronized the database schema using Prisma migrations and db push.
+- Tested audit creation, persistence, retrieval, and history views end-to-end.
+
+**What I learned:**
+- Learned how Prisma relations work in a one-to-many data model.
+- Better understood the difference between frontend state and backend request data after debugging undefined values in API routes.
+- Learned how Docker simplifies local database development and provides a consistent PostgreSQL environment.
+- Improved my understanding of how audit data should be modeled for future features such as shareable reports and analytics.
+
+**Blockers / what I'm stuck on:**
+- Encountered several schema mismatch issues after changing the Audit model structure.
+- Prisma queries were still referencing fields that no longer existed in the database schema, causing runtime errors.
+- Spent time debugging relation configuration and database synchronization issues after the schema redesign.
+
+**Plan for tomorrow:**
+- Build a more polished landing page and improve overall UI quality.
+- Implement AI-generated personalized audit summaries using an LLM API.
+- Create dynamic report pages using unique audit IDs.
+- Improve audit recommendation logic using pricing data from official vendor pricing pages.
+- Begin preparing PRICING_DATA.md and architecture documentation.

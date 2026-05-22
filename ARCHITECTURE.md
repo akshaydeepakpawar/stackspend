@@ -1,0 +1,1 @@
+PostgreSQL 16 runs in a Docker container during local development. Prisma ORM provides type-safe database access. In production the application can be deployed against any managed PostgreSQL provider such as Neon, Supabase Postgres, Railway, or Render PostgreSQL.

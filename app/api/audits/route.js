@@ -1,16 +1,14 @@
-import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
     const body = await req.json();
-
+    console.log(body);
     const audit = await prisma.audit.create({
       data: {
-        teamSize: body.teamSize,
-        useCase: body.useCase,
-        recommendation: body.recommendation,
-        savings: body.savings,
+        report: body.report,
+        totalMonthlySavings: body.totalMonthlySavings,
+        totalAnnualSavings: body.totalAnnualSavings,
 
         tools: {
           create: body.tools.map((tool) => ({
@@ -21,6 +19,7 @@ export async function POST(req) {
           })),
         },
       },
+
       include: {
         tools: true,
       },

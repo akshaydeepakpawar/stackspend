@@ -11,7 +11,7 @@ export default async function AuditsPage() {
   });
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
+    <div className="p-8">
       <h1 className="text-3xl font-bold mb-6">
         Audit History
       </h1>
@@ -21,17 +21,19 @@ export default async function AuditsPage() {
           key={audit.id}
           className="border rounded-lg p-4 mb-4"
         >
-          <h2>{audit.recommendation}</h2>
+          <p>
+            Monthly Savings:
+            ${audit.totalMonthlySavings}
+          </p>
 
-          <p>Savings: ${audit.savings}</p>
+          <p>
+            Annual Savings:
+            ${audit.totalAnnualSavings}
+          </p>
 
-          <div>
-            {audit.tools.map((tool) => (
-              <div key={tool.id}>
-                {tool.tool} - {tool.plan}
-              </div>
-            ))}
-          </div>
+          <p>
+            Tools: {audit.tools.length}
+          </p>
         </div>
       ))}
     </div>

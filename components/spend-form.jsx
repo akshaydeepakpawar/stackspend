@@ -5,9 +5,11 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { auditSchema } from "@/lib/schema";
 import { generateAudit } from "@/lib/audit-engine";
+import { toast } from "sonner";
 
 export default function SpendForm() {
   const [auditResult, setAuditResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { register, handleSubmit, watch, setValue, control } = useForm({
     resolver: zodResolver(auditSchema),
@@ -49,6 +51,7 @@ export default function SpendForm() {
   }, [setValue]);
 
   const onSubmit = async (data) => {
+    setLoading(true);
     const result = generateAudit(data);
 
     setAuditResult(result);
@@ -59,17 +62,25 @@ export default function SpendForm() {
       savings: result.savings,
     });
 
-    await fetch("/api/audits", {
+    const response = await fetch("/api/audits", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         ...data,
-        recommendation: result.recommendation,
-        savings: result.savings,
+        report: result,
+        totalMonthlySavings: result.totalMonthlySavings,
+        totalAnnualSavings: result.totalAnnualSavings,
       }),
     });
+
+    if (response.ok) {
+      toast.success("Audit saved successfully");
+    } else {
+      toast.error("Failed to save audit");
+    }
+    setLoading(false);
   };
 
   return (
@@ -195,7 +206,7 @@ export default function SpendForm() {
           type="submit"
           className="inline-flex items-center justify-center rounded bg-black px-6 py-3 text-sm font-semibold text-white hover:bg-gray-900"
         >
-          Generate Audit
+          {loading ? "Generating..." : "Generate Audit"}
         </button>
         <p className="text-sm text-gray-500">
           {fields.length} tool{fields.length === 1 ? "" : "s"} configured
