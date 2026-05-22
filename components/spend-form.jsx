@@ -203,17 +203,59 @@ export default function SpendForm() {
       </div>
 
       {auditResult && (
-        <div className="rounded-lg border border-gray-200 bg-gray-50 p-5">
-          <h2 className="text-2xl font-bold mb-3">Audit Result</h2>
-          <p className="mb-2">
-            <strong>Recommendation:</strong> {auditResult.recommendation}
-          </p>
-          <p className="mb-2">
-            <strong>Monthly Savings:</strong> ${auditResult.savings}
-          </p>
-          <p className="text-sm text-gray-700">
-            <strong>Reason:</strong> {auditResult.reason}
-          </p>
+        <div className="space-y-6">
+          <div className="rounded-xl bg-black p-6 text-white">
+            <h2 className="text-3xl font-bold">Potential Savings</h2>
+
+            <div className="mt-4 grid md:grid-cols-2 gap-4">
+              <div>
+                <p className="text-sm text-gray-300">Monthly Savings</p>
+
+                <p className="text-4xl font-bold">
+                  ${auditResult.totalMonthlySavings}
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm text-gray-300">Annual Savings</p>
+
+                <p className="text-4xl font-bold">
+                  ${auditResult.totalAnnualSavings}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {auditResult.isOptimized && (
+            <div className="rounded-lg border border-green-200 bg-green-50 p-4">
+              <p className="font-medium text-green-700">
+                Your AI stack already looks well optimized.
+              </p>
+            </div>
+          )}
+
+          <div className="space-y-4">
+            {auditResult.recommendations.map((item, index) => (
+              <div
+                key={index}
+                className="rounded-lg border bg-white p-5 shadow-sm"
+              >
+                <h3 className="font-bold text-lg">{item.tool}</h3>
+
+                <p className="mt-2">
+                  {item.currentPlan}
+                  {" → "}
+                  {item.recommendedPlan}
+                </p>
+
+                <p className="mt-2 font-semibold text-green-600">
+                  Save ${item.savings}/month
+                </p>
+
+                <p className="mt-2 text-sm text-gray-600">{item.reason}</p>
+              </div>
+            ))}
+          </div>
         </div>
       )}
     </form>
