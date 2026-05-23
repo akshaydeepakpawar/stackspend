@@ -140,7 +140,7 @@ export default function SpendForm() {
         throw new Error("Failed");
       }
 
-      toast.success("Details saved successfully");
+      toast.success("Report emailed successfully");
 
       setEmail("");
       setCompany("");
@@ -162,19 +162,20 @@ export default function SpendForm() {
 
         body: JSON.stringify({
           email,
+
           summary,
 
           monthlySavings: auditResult.totalMonthlySavings,
 
           annualSavings: auditResult.totalAnnualSavings,
+
+          reportLink: `${window.location.origin}/reports/${reportId}`,
         }),
       });
 
       if (!response.ok) {
-        throw new Error();
+        throw new Error("Failed to send email");
       }
-
-      toast.success("Report sent successfully");
     } catch (error) {
       console.error(error);
 

@@ -1,8 +1,10 @@
 import SpendForm from "@/components/spend-form";
+import Navbar from "@/components/navbar";
 
 export default function Home() {
   return (
     <main className="max-w-6xl mx-auto px-6 py-12">
+      <Navbar />
       {/* Hero */}
 
       <section className="text-center py-20">
@@ -15,9 +17,9 @@ export default function Home() {
         </h1>
 
         <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-          Analyze your AI subscriptions, uncover hidden waste,
-          and receive personalized recommendations to reduce
-          software spend in under 30 seconds.
+          Analyze your AI subscriptions, uncover hidden waste, and receive
+          personalized recommendations to reduce software spend in under 30
+          seconds.
         </p>
 
         <div className="flex justify-center gap-4 mt-8">
@@ -28,10 +30,7 @@ export default function Home() {
             Start Free Audit
           </a>
 
-          <a
-            href="/audits"
-            className="rounded-lg border px-6 py-3"
-          >
+          <a href="/audits" className="rounded-lg border px-6 py-3">
             View Audit History
           </a>
         </div>
@@ -42,23 +41,17 @@ export default function Home() {
       <section className="grid md:grid-cols-3 gap-6 mb-16">
         <div className="rounded-xl border p-6 text-center">
           <h3 className="text-3xl font-bold">30s</h3>
-          <p className="text-gray-600 mt-2">
-            Average audit time
-          </p>
+          <p className="text-gray-600 mt-2">Average audit time</p>
         </div>
 
         <div className="rounded-xl border p-6 text-center">
           <h3 className="text-3xl font-bold">5+</h3>
-          <p className="text-gray-600 mt-2">
-            AI tools supported
-          </p>
+          <p className="text-gray-600 mt-2">AI tools supported</p>
         </div>
 
         <div className="rounded-xl border p-6 text-center">
           <h3 className="text-3xl font-bold">$480+</h3>
-          <p className="text-gray-600 mt-2">
-            Typical annual savings
-          </p>
+          <p className="text-gray-600 mt-2">Typical annual savings</p>
         </div>
       </section>
 
@@ -66,9 +59,7 @@ export default function Home() {
 
       <section className="grid md:grid-cols-4 gap-4 mb-16">
         <div className="rounded-xl border p-5">
-          <h3 className="font-semibold mb-2">
-            Instant Savings Analysis
-          </h3>
+          <h3 className="font-semibold mb-2">Instant Savings Analysis</h3>
 
           <p className="text-sm text-gray-600">
             Calculate monthly and annual savings opportunities.
@@ -76,9 +67,7 @@ export default function Home() {
         </div>
 
         <div className="rounded-xl border p-5">
-          <h3 className="font-semibold mb-2">
-            AI Generated Insights
-          </h3>
+          <h3 className="font-semibold mb-2">AI Generated Insights</h3>
 
           <p className="text-sm text-gray-600">
             Receive personalized optimization recommendations.
@@ -86,9 +75,7 @@ export default function Home() {
         </div>
 
         <div className="rounded-xl border p-5">
-          <h3 className="font-semibold mb-2">
-            Compare Alternatives
-          </h3>
+          <h3 className="font-semibold mb-2">Compare Alternatives</h3>
 
           <p className="text-sm text-gray-600">
             Identify lower-cost plans with similar value.
@@ -96,9 +83,7 @@ export default function Home() {
         </div>
 
         <div className="rounded-xl border p-5">
-          <h3 className="font-semibold mb-2">
-            Shareable Reports
-          </h3>
+          <h3 className="font-semibold mb-2">Shareable Reports</h3>
 
           <p className="text-sm text-gray-600">
             Generate unique URLs for audit reports.
@@ -108,21 +93,20 @@ export default function Home() {
 
       {/* Form */}
 
-      <section
-        id="audit-form"
-        className="rounded-2xl border p-8 bg-white"
-      >
-        <h2 className="text-3xl font-bold mb-2">
-          Audit Your AI Stack
-        </h2>
+      <section id="audit-form" className="rounded-2xl border p-8 bg-white">
+        <h2 className="text-3xl font-bold mb-2">Audit Your AI Stack</h2>
 
         <p className="text-gray-600 mb-8">
-          Enter your current tools and subscriptions to
-          receive personalized recommendations.
+          Enter your current tools and subscriptions to receive personalized
+          recommendations.
         </p>
 
         <SpendForm />
       </section>
+      <footer className="mt-20 border-t pt-8 text-center text-sm text-gray-500">
+        <p>Built for the Credex Web Development Assignment</p>
+        <p className="mt-2">StackSpend © 2026</p>
+      </footer>
     </main>
   );
 }
