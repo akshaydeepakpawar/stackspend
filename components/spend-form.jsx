@@ -14,6 +14,9 @@ export default function SpendForm() {
   const [summary, setSummary] = useState("");
   const router = useRouter();
   const [reportId, setReportId] = useState("");
+  const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [role, setRole] = useState("");
 
   const { register, handleSubmit, watch, setValue, control } = useForm({
     resolver: zodResolver(auditSchema),
@@ -115,6 +118,67 @@ export default function SpendForm() {
       toast.error(error.message || "Something went wrong");
     } finally {
       setLoading(false);
+    }
+  };
+  const handleLeadSubmit = async () => {
+    try {
+      const response = await fetch("/api/leads", {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          email,
+          company,
+          role,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed");
+      }
+
+      toast.success("Details saved successfully");
+
+      setEmail("");
+      setCompany("");
+      setRole("");
+    } catch (error) {
+      console.error(error);
+
+      toast.error("Failed to save details");
+    }
+  };
+  const handleSendEmail = async () => {
+    try {
+      const response = await fetch("/api/send-report", {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          email,
+          summary,
+
+          monthlySavings: auditResult.totalMonthlySavings,
+
+          annualSavings: auditResult.totalAnnualSavings,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error();
+      }
+
+      toast.success("Report sent successfully");
+    } catch (error) {
+      console.error(error);
+
+      toast.error("Failed to send report");
     }
   };
 
@@ -311,6 +375,53 @@ export default function SpendForm() {
           <p className="text-gray-700 leading-relaxed">{summary}</p>
         </div>
       )}
+      {auditResult && (
+        <div className="rounded-xl border p-6 mt-8">
+          <h3 className="text-xl font-bold mb-2">Stay Updated</h3>
+
+          <p className="text-gray-600 mb-6">
+            Save your audit report and receive future optimization
+            recommendations.
+          </p>
+
+          <div className="space-y-4">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email Address"
+              className="w-full border rounded-lg p-3"
+            />
+
+            <input
+              type="text"
+              value={company}
+              onChange={(e) => setCompany(e.target.value)}
+              placeholder="Company (optional)"
+              className="w-full border rounded-lg p-3"
+            />
+
+            <input
+              type="text"
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              placeholder="Role (optional)"
+              className="w-full border rounded-lg p-3"
+            />
+
+            <button
+              type="button"
+              onClick={async () => {
+                await handleLeadSubmit();
+                await handleSendEmail();
+              }}
+              className="rounded-lg bg-black text-white px-5 py-3"
+            >
+              Email Report
+            </button>
+          </div>
+        </div>
+      )}
       {reportId && (
         <div className="flex gap-4">
           <button
@@ -336,22 +447,6 @@ export default function SpendForm() {
           </button>
         </div>
       )}
-      <div className="rounded-lg border p-5">
-        <h3 className="font-bold mb-3">Email This Report</h3>
-
-        <input
-          type="email"
-          placeholder="Enter your email"
-          className="w-full border rounded p-2"
-        />
-
-        <button
-          type="button"
-          className="mt-3 bg-black text-white px-4 py-2 rounded"
-        >
-          Send Report
-        </button>
-      </div>
     </form>
   );
 }

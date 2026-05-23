@@ -35,3 +35,13 @@ model Tool {
   auditId Int
   audit   Audit @relation(fields: [auditId], references: [id], onDelete: Cascade)
 }
+
+model Lead {
+  id        String   @id @default(cuid())
+
+  email     String
+  company   String?
+  role      String?
+
+  createdAt DateTime @default(now())
+}

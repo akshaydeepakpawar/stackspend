@@ -5,29 +5,27 @@ export async function POST(req) {
     const body = await req.json();
 
     const prompt = `
-You are an AI SaaS cost optimization consultant.
+You are an AI software cost optimization consultant.
 
+Audit Details:
 Team Size: ${body.teamSize}
 Use Case: ${body.useCase}
 
-Monthly Savings:
-${body.totalMonthlySavings}
-
-Annual Savings:
-${body.totalAnnualSavings}
+Monthly Savings: $${body.totalMonthlySavings}
+Annual Savings: $${body.totalAnnualSavings}
 
 Recommendations:
-${JSON.stringify(body.recommendations)}
+${JSON.stringify(body.recommendations, null, 2)}
 
-Write a professional summary in 80-120 words.
+Write a concise professional summary (80-120 words).
 
 Explain:
-- current situation
-- savings opportunities
+- current spend efficiency
+- optimization opportunities
 - annual impact
-- recommendation
+- actionable recommendation
 
-Do not use bullet points.
+No bullet points.
 `;
 
     const response = await fetch(
@@ -56,15 +54,14 @@ Do not use bullet points.
     const data = await response.json();
 
     return NextResponse.json({
-      summary:
-        data.choices?.[0]?.message?.content || "Unable to generate summary.",
+      summary: data.choices?.[0]?.message?.content ?? "Summary unavailable.",
     });
   } catch (error) {
     console.error(error);
 
     return NextResponse.json(
       {
-        summary: "Unable to generate summary at this time.",
+        summary: "Unable to generate summary.",
       },
       {
         status: 500,

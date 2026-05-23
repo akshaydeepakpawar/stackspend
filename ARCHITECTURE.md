@@ -1,1 +1,15 @@
-PostgreSQL 16 runs in a Docker container during local development. Prisma ORM provides type-safe database access. In production the application can be deployed against any managed PostgreSQL provider such as Neon, Supabase Postgres, Railway, or Render PostgreSQL.
+Frontend
+- Next.js App Router
+- React Hook Form
+- Tailwind CSS
+
+Backend
+- API Routes
+
+Database
+- PostgreSQL 16
+- Docker
+- Prisma ORM
+
+AI Layer
+- OpenRouter
