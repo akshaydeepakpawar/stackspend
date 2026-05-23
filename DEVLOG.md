@@ -55,3 +55,31 @@
 - Create dynamic report pages using unique audit IDs.
 - Improve audit recommendation logic using pricing data from official vendor pricing pages.
 - Begin preparing PRICING_DATA.md and architecture documentation.
+
+## Day 3 — 2026-05-22
+
+Hours worked: 6
+
+What I did:
+- Added shareable audit reports using public IDs.
+- Built a dedicated report page with savings metrics, recommendations, and tool stack overview.
+- Added AI-generated audit summaries.
+- Implemented audit history retrieval from PostgreSQL.
+- Added copy-link and PDF export actions.
+- Improved overall report UI and page structure.
+- Refactored report actions into a client component while keeping database access server-side.
+
+What I learned:
+- Learned how to separate Server Components and Client Components in Next.js App Router.
+- Better understood Prisma relations and data modeling.
+- Learned how to design shareable URLs without exposing sequential database IDs.
+
+Blockers:
+- Encountered Prisma schema synchronization issues after introducing public IDs and summary fields.
+- Fixed multiple routing and database validation issues.
+
+Plan for tomorrow:
+- Integrate a real LLM provider through OpenRouter.
+- Add email capture and report delivery.
+- Improve landing page design and onboarding experience.
+- Create pricing source documentation.
