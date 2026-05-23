@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { auditSchema } from "@/lib/schema";
 import { generateAudit } from "@/lib/audit-engine";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { PLAN_OPTIONS, PRICING } from "@/lib/pricing-data";
 
 export default function SpendForm() {
   const [auditResult, setAuditResult] = useState(null);
@@ -17,6 +18,7 @@ export default function SpendForm() {
   const [email, setEmail] = useState("");
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const { register, handleSubmit, watch, setValue, control } = useForm({
     resolver: zodResolver(auditSchema),
@@ -34,28 +36,72 @@ export default function SpendForm() {
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control,
     name: "tools",
   });
 
-  const watchedValues = watch();
+  const watchedTools = useWatch({
+    control,
+    name: "tools",
+  });
+
+  const watchedTeamSize = useWatch({
+    control,
+    name: "teamSize",
+  });
+
+  const watchedUseCase = useWatch({
+    control,
+    name: "useCase",
+  });
 
   useEffect(() => {
-    localStorage.setItem("audit-form", JSON.stringify(watchedValues));
-  }, [watchedValues]);
+    if (!isLoaded) return;
+
+    localStorage.setItem(
+      "audit-form",
+      JSON.stringify({
+        tools: watchedTools,
+        teamSize: watchedTeamSize,
+        useCase: watchedUseCase,
+      }),
+    );
+  }, [isLoaded, watchedTools, watchedTeamSize, watchedUseCase]);
+
+  useEffect(() => {
+    const tools = watchedTools || [];
+
+    tools.forEach((tool, index) => {
+      const price = PRICING[tool.tool]?.[tool.plan];
+
+      if (price !== undefined && tool.monthlySpend !== price) {
+        setValue(`tools.${index}.monthlySpend`, price, {
+          shouldDirty: true,
+        });
+      }
+    });
+  }, [watchedTools, setValue]);
 
   useEffect(() => {
     const saved = localStorage.getItem("audit-form");
 
     if (saved) {
-      const parsed = JSON.parse(saved);
+      try {
+        const parsed = JSON.parse(saved);
 
-      Object.entries(parsed).forEach(([key, value]) => {
-        setValue(key, value);
-      });
+        replace(parsed.tools || []);
+
+        setValue("teamSize", parsed.teamSize || 1);
+
+        setValue("useCase", parsed.useCase || "coding");
+      } catch {
+        localStorage.removeItem("audit-form");
+      }
     }
-  }, [setValue]);
+
+    setIsLoaded(true);
+  }, [replace, setValue]);
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -140,15 +186,16 @@ export default function SpendForm() {
         throw new Error("Failed");
       }
 
-      toast.success("Report emailed successfully");
+      toast.success("Details saved");
 
       setEmail("");
       setCompany("");
       setRole("");
+      return true;
     } catch (error) {
       console.error(error);
-
       toast.error("Failed to save details");
+      return false;
     }
   };
   const handleSendEmail = async () => {
@@ -176,6 +223,7 @@ export default function SpendForm() {
       if (!response.ok) {
         throw new Error("Failed to send email");
       }
+      toast.success("Report emailed successfully");
     } catch (error) {
       console.error(error);
 
@@ -198,7 +246,7 @@ export default function SpendForm() {
             append({
               tool: "ChatGPT",
               plan: "Plus",
-              monthlySpend: 0,
+              monthlySpend: 20,
               seats: 1,
             })
           }
@@ -209,71 +257,81 @@ export default function SpendForm() {
       </div>
 
       <div className="space-y-4">
-        {fields.map((field, index) => (
-          <div
-            key={field.id}
-            className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
-          >
-            <div className="flex items-center justify-between gap-4">
-              <p className="text-sm font-semibold text-gray-900">
-                Tool {index + 1}
-              </p>
-              <button
-                type="button"
-                onClick={() => remove(index)}
-                className="rounded bg-red-50 px-3 py-1 text-sm font-medium text-red-600 hover:bg-red-100"
-              >
-                Remove
-              </button>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-4 mt-4">
-              <label className="space-y-1 text-sm text-gray-700">
-                <span>Tool</span>
-                <select
-                  {...register(`tools.${index}.tool`)}
-                  className="w-full rounded border border-gray-300 bg-white p-2 text-sm"
+        {fields.map((field, index) => {
+          const selectedTool = watch(`tools.${index}.tool`);
+          return (
+            <div
+              key={field.id}
+              className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm"
+            >
+              <div className="flex items-center justify-between gap-4">
+                <p className="text-sm font-semibold text-gray-900">
+                  Tool {index + 1}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => remove(index)}
+                  className="rounded bg-red-50 px-3 py-1 text-sm font-medium text-red-600 hover:bg-red-100"
                 >
-                  <option>ChatGPT</option>
-                  <option>Claude</option>
-                  <option>Cursor</option>
-                  <option>GitHub Copilot</option>
-                  <option>Gemini</option>
-                </select>
-              </label>
+                  Remove
+                </button>
+              </div>
 
-              <label className="space-y-1 text-sm text-gray-700">
-                <span>Plan</span>
-                <input
-                  {...register(`tools.${index}.plan`)}
-                  className="w-full rounded border border-gray-300 bg-white p-2 text-sm"
-                />
-              </label>
+              <div className="grid gap-4 md:grid-cols-4 mt-4">
+                <label className="space-y-1 text-sm text-gray-700">
+                  <span>Tool</span>
+                  <select
+                    {...register(`tools.${index}.tool`)}
+                    className="w-full rounded border border-gray-300 bg-white p-2 text-sm"
+                  >
+                    <option>ChatGPT</option>
+                    <option>Claude</option>
+                    <option>Cursor</option>
+                    <option>GitHub Copilot</option>
+                    <option>Gemini</option>
+                  </select>
+                </label>
 
-              <label className="space-y-1 text-sm text-gray-700">
-                <span>Monthly Spend</span>
-                <input
-                  type="number"
-                  {...register(`tools.${index}.monthlySpend`, {
-                    valueAsNumber: true,
-                  })}
-                  className="w-full rounded border border-gray-300 bg-white p-2 text-sm"
-                />
-              </label>
+                <label className="space-y-1 text-sm text-gray-700">
+                  <span>Plan</span>
+                  <select
+                    {...register(`tools.${index}.plan`)}
+                    className="w-full rounded border border-gray-300 bg-white p-2 text-sm"
+                  >
+                    {PLAN_OPTIONS[selectedTool]?.map((plan) => (
+                      <option key={plan} value={plan}>
+                        {plan}
+                      </option>
+                    ))}
+                  </select>
+                </label>
 
-              <label className="space-y-1 text-sm text-gray-700">
-                <span>Seats</span>
-                <input
-                  type="number"
-                  {...register(`tools.${index}.seats`, {
-                    valueAsNumber: true,
-                  })}
-                  className="w-full rounded border border-gray-300 bg-white p-2 text-sm"
-                />
-              </label>
+                <label className="space-y-1 text-sm text-gray-700">
+                  <span>Monthly Spend</span>
+                  <input
+                    type="number"
+                    readOnly
+                    {...register(`tools.${index}.monthlySpend`, {
+                      valueAsNumber: true,
+                    })}
+                    className="w-full rounded border border-gray-300 bg-white p-2 text-sm"
+                  />
+                </label>
+
+                <label className="space-y-1 text-sm text-gray-700">
+                  <span>Seats</span>
+                  <input
+                    type="number"
+                    {...register(`tools.${index}.seats`, {
+                      valueAsNumber: true,
+                    })}
+                    className="w-full rounded border border-gray-300 bg-white p-2 text-sm"
+                  />
+                </label>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
@@ -413,8 +471,11 @@ export default function SpendForm() {
             <button
               type="button"
               onClick={async () => {
-                await handleLeadSubmit();
-                await handleSendEmail();
+                const success = await handleLeadSubmit();
+
+                if (success) {
+                  await handleSendEmail();
+                }
               }}
               className="rounded-lg bg-black text-white px-5 py-3"
             >
@@ -424,7 +485,7 @@ export default function SpendForm() {
         </div>
       )}
       {reportId && (
-        <div className="flex gap-4">
+        <div className="flex gap-4 flex-wrap">
           <button
             type="button"
             onClick={() => router.push(`/reports/${reportId}`)}
@@ -445,6 +506,17 @@ export default function SpendForm() {
             className="rounded border px-4 py-2"
           >
             Copy Share Link
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              localStorage.removeItem("audit-form");
+              window.location.reload();
+            }}
+            className="rounded border border-red-200 px-4 py-2 text-red-600 hover:bg-red-50"
+          >
+            Start New Audit
           </button>
         </div>
       )}

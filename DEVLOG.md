@@ -83,3 +83,47 @@ Plan for tomorrow:
 - Add email capture and report delivery.
 - Improve landing page design and onboarding experience.
 - Create pricing source documentation.
+
+## Day 4 — 2026-05-23
+
+Hours worked: 7
+
+What I did:
+
+* Reworked the pricing engine to support dynamic plan-based pricing for all supported AI tools.
+* Added centralized pricing management through `pricing-data.js`.
+* Converted the plan field from a free-text input to a controlled dropdown with valid plans for each tool.
+* Implemented automatic monthly spend updates based on selected tool and plan.
+* Expanded recommendation rules for ChatGPT, Claude, Cursor, GitHub Copilot, and Gemini.
+* Added savings validation to prevent invalid or negative optimization recommendations.
+* Implemented draft persistence using localStorage.
+* Added automatic restoration of saved audits after page refresh.
+* Fixed React Hook Form reactivity issues by replacing `watch()` with `useWatch()`.
+* Fixed dynamic field array restoration using `replace()` from `useFieldArray`.
+* Added “Start New Audit” workflow for clearing saved drafts and beginning a fresh audit.
+* Improved overall audit flow and user experience after report generation.
+* Performed extensive testing of pricing calculations, recommendations, report generation, email delivery, and saved draft functionality.
+
+What I learned:
+
+* Learned the difference between `watch()` and `useWatch()` in React Hook Form and when each should be used.
+* Learned proper handling of dynamic arrays using `useFieldArray` and `replace()`.
+* Improved understanding of localStorage persistence patterns and hydration timing issues.
+* Learned how to prevent state overwrite issues during initial component load.
+* Gained experience building rule-based recommendation systems using configurable pricing data.
+
+Blockers:
+
+* Spent significant time debugging why pricing values were not updating when plans changed.
+* Encountered React Hook Form reactivity issues caused by using `watch()` instead of `useWatch()`.
+* Faced localStorage synchronization problems where default values overwrote saved drafts during page load.
+* Resolved field array restoration issues when reloading previously saved audits.
+
+Plan for tomorrow:
+
+* Add current spend metrics alongside monthly and annual savings.
+* Improve audit result presentation with KPI cards and better visual hierarchy.
+* Enhance report page design and mobile responsiveness.
+* Add user authentication with Clerk.
+* Introduce dashboard analytics for historical audits and savings trends.
+* Prepare the application for deployment and production testing.
