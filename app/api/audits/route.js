@@ -1,3 +1,4 @@
+import { prisma } from "@/lib/prisma";
 import { NextResponse } from "next/server";
 
 export async function POST(req) {
@@ -7,6 +8,7 @@ export async function POST(req) {
     const audit = await prisma.audit.create({
       data: {
         report: body.report,
+        summary: body.summary,
         totalMonthlySavings: body.totalMonthlySavings,
         totalAnnualSavings: body.totalAnnualSavings,
 
@@ -31,7 +33,7 @@ export async function POST(req) {
 
     return NextResponse.json(
       { error: "Failed to save audit" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

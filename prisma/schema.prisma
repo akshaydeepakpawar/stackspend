@@ -9,9 +9,16 @@ datasource db {
 
 model Audit {
   id                  Int      @id @default(autoincrement())
+
+  publicId            String   @unique @default(cuid())
+
   report              Json
+
+  summary             String?
+
   totalMonthlySavings Int
   totalAnnualSavings  Int
+
   createdAt           DateTime @default(now())
 
   tools Tool[]

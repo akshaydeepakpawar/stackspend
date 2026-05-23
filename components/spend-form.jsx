@@ -6,10 +6,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { auditSchema } from "@/lib/schema";
 import { generateAudit } from "@/lib/audit-engine";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export default function SpendForm() {
   const [auditResult, setAuditResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [summary, setSummary] = useState("");
+  const router = useRouter();
+  const [reportId, setReportId] = useState("");
 
   const { register, handleSubmit, watch, setValue, control } = useForm({
     resolver: zodResolver(auditSchema),
@@ -52,35 +56,66 @@ export default function SpendForm() {
 
   const onSubmit = async (data) => {
     setLoading(true);
-    const result = generateAudit(data);
 
-    setAuditResult(result);
+    try {
+      const result = generateAudit(data);
 
-    console.log("Submitting:", {
-      ...data,
-      recommendation: result.recommendation,
-      savings: result.savings,
-    });
+      const summaryResponse = await fetch("/api/summary", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          teamSize: data.teamSize,
+          useCase: data.useCase,
 
-    const response = await fetch("/api/audits", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...data,
-        report: result,
-        totalMonthlySavings: result.totalMonthlySavings,
-        totalAnnualSavings: result.totalAnnualSavings,
-      }),
-    });
+          totalMonthlySavings: result.totalMonthlySavings,
 
-    if (response.ok) {
+          totalAnnualSavings: result.totalAnnualSavings,
+
+          recommendations: result.recommendations,
+        }),
+      });
+
+      if (!summaryResponse.ok) {
+        throw new Error("Failed to generate summary");
+      }
+
+      const summaryData = await summaryResponse.json();
+
+      setSummary(summaryData.summary);
+      setAuditResult(result);
+
+      const response = await fetch("/api/audits", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          ...data,
+          report: result,
+          summary: summaryData.summary,
+          totalMonthlySavings: result.totalMonthlySavings,
+          totalAnnualSavings: result.totalAnnualSavings,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save audit");
+      }
+
+      const createdAudit = await response.json();
+
+      setReportId(createdAudit.publicId);
+
       toast.success("Audit saved successfully");
-    } else {
-      toast.error("Failed to save audit");
+    } catch (error) {
+      console.error(error);
+
+      toast.error(error.message || "Something went wrong");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   return (
@@ -269,6 +304,54 @@ export default function SpendForm() {
           </div>
         </div>
       )}
+      {summary && (
+        <div className="rounded-lg border bg-white p-5 shadow-sm">
+          <h3 className="font-bold mb-2">AI Summary</h3>
+
+          <p className="text-gray-700 leading-relaxed">{summary}</p>
+        </div>
+      )}
+      {reportId && (
+        <div className="flex gap-4">
+          <button
+            type="button"
+            onClick={() => router.push(`/reports/${reportId}`)}
+            className="rounded bg-black px-4 py-2 text-white"
+          >
+            View Full Report
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `${window.location.origin}/reports/${reportId}`,
+              );
+
+              toast.success("Link copied");
+            }}
+            className="rounded border px-4 py-2"
+          >
+            Copy Share Link
+          </button>
+        </div>
+      )}
+      <div className="rounded-lg border p-5">
+        <h3 className="font-bold mb-3">Email This Report</h3>
+
+        <input
+          type="email"
+          placeholder="Enter your email"
+          className="w-full border rounded p-2"
+        />
+
+        <button
+          type="button"
+          className="mt-3 bg-black text-white px-4 py-2 rounded"
+        >
+          Send Report
+        </button>
+      </div>
     </form>
   );
 }
