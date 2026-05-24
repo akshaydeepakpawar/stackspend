@@ -373,32 +373,58 @@ export default function SpendForm() {
 
       {auditResult && (
         <div className="space-y-6">
-          <div className="rounded-xl bg-black p-6 text-white">
-            <h2 className="text-3xl font-bold">Potential Savings</h2>
+          <div className="grid gap-4 md:grid-cols-3">
+            <div className="rounded-xl border bg-white p-6 shadow-sm">
+              <p className="text-sm text-gray-500">Current Monthly Spend</p>
 
-            <div className="mt-4 grid md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-gray-300">Monthly Savings</p>
+              <p className="mt-2 text-3xl font-bold">
+                ${auditResult.currentMonthlySpend}
+              </p>
+            </div>
 
-                <p className="text-4xl font-bold">
-                  ${auditResult.totalMonthlySavings}
-                </p>
-              </div>
+            <div className="rounded-xl border bg-white p-6 shadow-sm">
+              <p className="text-sm text-gray-500">Monthly Savings</p>
 
-              <div>
-                <p className="text-sm text-gray-300">Annual Savings</p>
+              <p className="mt-2 text-3xl font-bold text-green-600">
+                ${auditResult.totalMonthlySavings}
+              </p>
+            </div>
 
-                <p className="text-4xl font-bold">
-                  ${auditResult.totalAnnualSavings}
-                </p>
-              </div>
+            <div className="rounded-xl border bg-white p-6 shadow-sm">
+              <p className="text-sm text-gray-500">Annual Savings</p>
+
+              <p className="mt-2 text-3xl font-bold text-green-600">
+                ${auditResult.totalAnnualSavings}
+              </p>
             </div>
           </div>
+          {auditResult.totalMonthlySavings > 500 && (
+            <div className="rounded-xl border border-green-200 bg-green-50 p-6">
+              <h3 className="text-2xl font-bold">
+                Save Over ${auditResult.totalMonthlySavings}/month
+              </h3>
+
+              <p className="mt-2 text-gray-700">
+                Your audit shows significant overspend. Credex can help secure
+                discounted AI credits and reduce costs even further.
+              </p>
+
+              <button className="mt-4 rounded bg-black px-5 py-3 text-white">
+                Book Credex Consultation
+              </button>
+            </div>
+          )}
 
           {auditResult.isOptimized && (
-            <div className="rounded-lg border border-green-200 bg-green-50 p-4">
-              <p className="font-medium text-green-700">
-                Your AI stack already looks well optimized.
+            <div className="rounded-xl border border-green-200 bg-green-50 p-6">
+              <h3 className="font-bold text-green-700">
+                You're spending efficiently
+              </h3>
+
+              <p className="mt-2 text-green-700">
+                We didn't find any meaningful savings opportunities in your
+                current AI stack. We'll notify you when new optimization
+                opportunities become available.
               </p>
             </div>
           )}
