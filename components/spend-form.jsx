@@ -402,13 +402,15 @@ export default function SpendForm() {
               </p>
             </div>
           </div>
-          //CTA block
+
+          {/* CTA block */}
+          
           {auditResult.totalMonthlySavings > 500 && (
             <div className="rounded-2xl border border-green-200 bg-green-50 p-6">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
                   <h3 className="text-2xl font-bold text-green-900">
-                    You're Leaving ${auditResult.totalMonthlySavings}/Month on
+                    You&#39;re Leaving ${auditResult.totalMonthlySavings}/Month on
                     the Table
                   </h3>
 
@@ -437,8 +439,8 @@ export default function SpendForm() {
               </h3>
 
               <p className="mt-2 text-blue-800">
-                We didn't identify any major opportunities to reduce costs right
-                now. Leave your email and we'll notify you if new optimization
+                We didn&#39;t identify any major opportunities to reduce costs right
+                now. Leave your email and we&#39;ll notify you if new optimization
                 opportunities become available for your stack.
               </p>
             </div>
@@ -446,12 +448,12 @@ export default function SpendForm() {
           {auditResult.isOptimized && (
             <div className="rounded-xl border border-green-200 bg-green-50 p-6">
               <h3 className="font-bold text-green-700">
-                You're spending efficiently
+                You&#39;re spending efficiently
               </h3>
 
               <p className="mt-2 text-green-700">
-                We didn't find any meaningful savings opportunities in your
-                current AI stack. We'll notify you when new optimization
+                We didn&#39;t find any meaningful savings opportunities in your
+                current AI stack. We&#39;ll notify you when new optimization
                 opportunities become available.
               </p>
             </div>

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import ReportActions from "@/components/report-actions";
+import Link from "next/link";
 
 export default async function ReportPage({ params }) {
   const { id } = await params;
@@ -140,12 +141,9 @@ export default async function ReportPage({ params }) {
           opportunities.
         </p>
 
-        <a
-          href="/"
-          className="inline-block mt-4 rounded bg-white text-black px-5 py-3 font-medium"
-        >
+        <Link href="/" className="...">
           Start New Audit
-        </a>
+        </Link>
       </section>
     </main>
   );

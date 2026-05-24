@@ -1,11 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export default function ReportActions() {
-  const router = useRouter();
-
   return (
     <section className="flex flex-wrap gap-3 border-t pt-6 mb-10">
       <button
