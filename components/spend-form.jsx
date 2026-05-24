@@ -19,6 +19,7 @@ export default function SpendForm() {
   const [company, setCompany] = useState("");
   const [role, setRole] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
+  const [website, setWebsite] = useState("");
 
   const { register, handleSubmit, watch, setValue, control } = useForm({
     resolver: zodResolver(auditSchema),
@@ -167,6 +168,9 @@ export default function SpendForm() {
     }
   };
   const handleLeadSubmit = async () => {
+    if (website) {
+      return false;
+    }
     try {
       const response = await fetch("/api/leads", {
         method: "POST",
@@ -493,6 +497,14 @@ export default function SpendForm() {
           </p>
 
           <div className="space-y-4">
+            <input
+              type="text"
+              value={website}
+              onChange={(e) => setWebsite(e.target.value)}
+              className="hidden"
+              tabIndex={-1}
+              autoComplete="off"
+            />
             <input
               type="email"
               value={email}
