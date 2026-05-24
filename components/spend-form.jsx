@@ -398,23 +398,47 @@ export default function SpendForm() {
               </p>
             </div>
           </div>
+          //CTA block
           {auditResult.totalMonthlySavings > 500 && (
-            <div className="rounded-xl border border-green-200 bg-green-50 p-6">
-              <h3 className="text-2xl font-bold">
-                Save Over ${auditResult.totalMonthlySavings}/month
-              </h3>
+            <div className="rounded-2xl border border-green-200 bg-green-50 p-6">
+              <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <h3 className="text-2xl font-bold text-green-900">
+                    You're Leaving ${auditResult.totalMonthlySavings}/Month on
+                    the Table
+                  </h3>
 
-              <p className="mt-2 text-gray-700">
-                Your audit shows significant overspend. Credex can help secure
-                discounted AI credits and reduce costs even further.
-              </p>
+                  <p className="mt-2 text-green-800">
+                    Based on your current AI stack, there are significant
+                    cost-saving opportunities. Credex helps startups acquire
+                    discounted AI credits and optimize AI infrastructure spend.
+                  </p>
+                </div>
 
-              <button className="mt-4 rounded bg-black px-5 py-3 text-white">
-                Book Credex Consultation
-              </button>
+                <a
+                  href="https://credex.rocks"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-lg bg-black px-5 py-3 text-center font-medium text-white"
+                >
+                  Book Credex Consultation
+                </a>
+              </div>
             </div>
           )}
+          {auditResult.totalMonthlySavings < 100 && (
+            <div className="rounded-xl border border-blue-200 bg-blue-50 p-6">
+              <h3 className="font-bold text-blue-900">
+                Your AI Spend Looks Healthy
+              </h3>
 
+              <p className="mt-2 text-blue-800">
+                We didn't identify any major opportunities to reduce costs right
+                now. Leave your email and we'll notify you if new optimization
+                opportunities become available for your stack.
+              </p>
+            </div>
+          )}
           {auditResult.isOptimized && (
             <div className="rounded-xl border border-green-200 bg-green-50 p-6">
               <h3 className="font-bold text-green-700">
@@ -428,7 +452,6 @@ export default function SpendForm() {
               </p>
             </div>
           )}
-
           <div className="space-y-4">
             {auditResult.recommendations.map((item, index) => (
               <div
