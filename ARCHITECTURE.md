@@ -1,14 +1,48 @@
+# ARCHITECTURE.md
+
 # StackSpend Architecture
 
 ## Overview
 
-StackSpend is an AI subscription auditing platform that helps individuals and teams identify unnecessary spending on AI tools and discover optimization opportunities.
+StackSpend is a full-stack AI subscription auditing platform that helps users identify unnecessary spending across AI products and discover optimization opportunities.
 
-The application analyzes tool subscriptions, generates recommendations, calculates potential savings, and produces shareable reports.
+The system combines:
+
+- Rule-based cost analysis
+- AI-generated executive summaries
+- PostgreSQL persistence
+- Shareable audit reports
+- Email delivery workflows
+
+The architecture prioritizes simplicity, transparency, and rapid iteration while remaining scalable for future growth.
 
 ---
 
-## Frontend
+# High-Level Architecture
+
+```mermaid
+flowchart TD
+
+A[User Form] --> B[Audit Engine]
+
+B --> C[Savings Calculation]
+
+C --> D[AI Summary Generation]
+
+D --> E[PostgreSQL]
+
+E --> F[Public Report Page]
+
+E --> G[Email Delivery]
+
+G --> H[End User Inbox]
+```
+
+---
+
+# System Components
+
+## Frontend Layer
 
 ### Technologies
 
@@ -16,64 +50,209 @@ The application analyzes tool subscriptions, generates recommendations, calculat
 - React
 - Tailwind CSS
 - React Hook Form
-- Zod Validation
+- Zod
 
 ### Responsibilities
 
 - Collect subscription information
+- Validate user input
 - Display recommendations
-- Render AI summaries
-- Show savings analysis
-- Display audit history
-- Present shareable reports
+- Render AI-generated summaries
+- Display savings calculations
+- Show historical audits
+- Present public reports
+
+### Design Goals
+
+- Fast user onboarding
+- Minimal form friction
+- Mobile-friendly experience
+- Shareable reports
 
 ---
 
-## Backend
+# Backend Layer
 
-### Technologies
+## Technologies
 
 - Next.js Route Handlers
 
 ### Responsibilities
 
-- Generate audit summaries
-- Store audit reports
-- Store lead information
-- Generate shareable reports
-- Send email reports
+### Audit Generation
 
----
+Receives tool subscriptions and generates:
 
-## Database
+- Monthly savings
+- Annual savings
+- Optimization recommendations
 
-### Technologies
+### AI Summary Generation
 
-- PostgreSQL 16
-- Prisma ORM
-- Docker
+Creates executive summaries using OpenRouter.
 
-### Tables
-
-#### Audit
+### Lead Management
 
 Stores:
 
-- Generated report
-- AI summary
-- Savings calculations
-- Report metadata
+- Email
+- Company
+- Role
 
-#### Tool
+### Email Delivery
+
+Delivers reports through Resend.
+
+### Report Retrieval
+
+Provides public access to generated reports.
+
+---
+
+# Audit Engine
+
+## Core Philosophy
+
+Audit recommendations are deterministic.
+
+The application intentionally avoids using AI for savings calculations.
+
+Reasoning:
+
+- Calculations must be predictable
+- Results must be reproducible
+- Savings must be auditable
+
+AI is only used to explain findings.
+
+---
+
+## Recommendation Flow
+
+```mermaid
+flowchart TD
+
+A[Tool + Plan + Seats]
+
+--> B[Pricing Lookup]
+
+--> C[Recommendation Rules]
+
+--> D[Savings Calculation]
+
+--> E[Final Recommendation]
+```
+
+---
+
+# Pricing Layer
+
+## Data Source
+
+Pricing is maintained in:
+
+```txt
+lib/pricing-data.js
+```
+
+The pricing layer contains:
+
+- Tool pricing
+- Subscription plans
+- Business plan costs
+- Seat-based pricing
+
+Supported platforms:
+
+- ChatGPT
+- Claude
+- Cursor
+- GitHub Copilot
+- Gemini
+
+---
+
+# Recommendation Layer
+
+## Rules-Based Engine
+
+Recommendations are maintained separately in:
+
+```txt
+lib/recommendation-rules.js
+```
+
+Example:
+
+```txt
+ChatGPT Business
+↓
+ChatGPT Plus
+↓
+Save $10/month per seat
+```
+
+Benefits:
+
+- Transparent logic
+- Easy maintenance
+- Predictable outcomes
+- Easy testing
+
+---
+
+# AI Layer
+
+## Provider
+
+OpenRouter
+
+## Model
+
+GPT-4o Mini
+
+## Responsibilities
+
+Generate:
+
+- Executive summaries
+- Spending explanations
+- Optimization narratives
+
+AI never determines savings values.
+
+Savings calculations originate exclusively from the audit engine.
+
+---
+
+# Database Layer
+
+## Technologies
+
+- PostgreSQL 16
+- Prisma ORM
+
+## Tables
+
+### Audit
+
+Stores:
+
+- Public report identifier
+- Savings metrics
+- AI summary
+- Metadata
+
+### Tool
 
 Stores:
 
 - Tool name
-- Subscription plan
+- Plan
 - Monthly spend
 - Seat count
 
-#### Lead
+### Lead
 
 Stores:
 
@@ -83,59 +262,198 @@ Stores:
 
 ---
 
-## AI Layer
+# Public Reports
 
-### Provider
-
-OpenRouter
-
-### Model
-
-GPT-4o Mini
-
-### Responsibilities
-
-- Generate executive summaries
-- Explain optimization opportunities
-- Highlight savings potential
-
----
-
-## Report Flow
-
-User Input
-↓
-Audit Engine
-↓
-Savings Calculation
-↓
-AI Summary Generation
-↓
-Database Storage
-↓
-Public Report URL
-↓
-Email Delivery
-
----
-
-## Public Report Architecture
-
-Reports use a generated publicId instead of sequential database IDs.
+Reports use generated public identifiers.
 
 Example:
 
+```txt
 /reports/cmcz123abc456
+```
 
-This prevents simple enumeration of reports and creates shareable URLs.
+Advantages:
+
+- Shareable URLs
+- No database ID exposure
+- Reduced enumeration risk
 
 ---
 
-## Future Improvements
+# Security Considerations
 
-- Authentication
+## Public Report Privacy
+
+Public reports exclude:
+
+- Email addresses
+- Company information
+- Personal identifiers
+
+Only audit-related information is displayed.
+
+---
+
+## Spam Prevention
+
+Lead forms include a honeypot field.
+
+Purpose:
+
+- Block automated submissions
+- Prevent low-quality leads
+- Reduce spam traffic
+
+---
+
+# Testing Strategy
+
+## Audit Engine Tests
+
+Coverage includes:
+
+- Recommendation generation
+- Monthly savings calculations
+- Annual savings calculations
+- Optimized stack detection
+- Multi-tool audits
+
+Testing framework:
+
+```txt
+Vitest
+```
+
+---
+
+# CI/CD
+
+## GitHub Actions
+
+Pipeline executes on:
+
+- Push
+- Pull Request
+
+Checks:
+
+1. Dependency installation
+2. ESLint validation
+3. Audit engine tests
+
+This prevents regressions before deployment.
+
+---
+
+# Scalability Considerations
+
+If StackSpend scaled to 10,000+ audits per day:
+
+### Move Summary Generation To Queues
+
+Current:
+
+```txt
+Request → AI → Response
+```
+
+Future:
+
+```txt
+Request → Queue → Worker → Database
+```
+
+Benefits:
+
+- Faster response times
+- Reduced API bottlenecks
+
+---
+
+### Redis Caching
+
+Cache:
+
+- Public reports
+- Pricing data
+- Recommendation results
+
+Benefits:
+
+- Reduced database load
+- Faster report rendering
+
+---
+
+### Database Scaling
+
+Potential upgrades:
+
+- Read replicas
+- Connection pooling
+- Query optimization
+
+---
+
+### CDN Distribution
+
+Public reports could be cached globally through a CDN.
+
+Benefits:
+
+- Lower server load
+- Faster international access
+
+---
+
+# Architectural Tradeoffs
+
+## Rules Instead Of AI Recommendations
+
+Chosen because:
+
+- Deterministic
+- Explainable
+- Easy to test
+
+Tradeoff:
+
+- Less adaptive than ML-driven optimization.
+
+---
+
+## Static Pricing Data
+
+Chosen because:
+
+- Fast implementation
+- Predictable calculations
+
+Tradeoff:
+
+- Requires manual updates when vendor pricing changes.
+
+---
+
+## Public Reports Without Authentication
+
+Chosen because:
+
+- Lower friction
+- Easier sharing
+
+Tradeoff:
+
+- Public links must remain non-sensitive.
+
+---
+
+# Future Architecture Improvements
+
+- User authentication
 - Team workspaces
-- Usage analytics
-- Billing integrations
-- Automatic pricing updates
-- PDF generation
+- Organization dashboards
+- Automated pricing synchronization
+- PDF export service
+- Usage-based optimization
+- Vendor benchmark comparisons
