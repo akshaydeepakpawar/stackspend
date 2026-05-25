@@ -1,16 +1,167 @@
 # StackSpend
 
-StackSpend is an AI subscription auditing platform that helps individuals, founders, and engineering teams identify unnecessary spending on AI tools and discover cost-saving opportunities.
-
-Users can enter their current AI subscriptions, receive optimization recommendations, generate AI-powered summaries, and create shareable audit reports with projected monthly and annual savings.
-
----
+StackSpend helps developers, founders, and teams analyze AI subscription costs, identify unnecessary spending, and discover optimization opportunities through automated audits and AI-generated executive summaries.
 
 ## Live Demo
 
-Deployed URL:
+Application:
 
-https://your-deployed-url.vercel.app
+https://your-domain.vercel.app
+
+Example Public Report:
+
+https://your-domain.vercel.app/reports/example-id
+
+> Replace with production URLs after deployment.
+
+---
+
+## Problem
+
+AI subscriptions are becoming a recurring expense for individuals and teams.
+
+Many users subscribe to multiple tools including:
+
+- ChatGPT
+- Claude
+- Cursor
+- GitHub Copilot
+- Gemini
+- Windsurf
+- OpenAI API
+- Anthropic API
+
+Over time, overlapping subscriptions, unused premium plans, and unnecessary business tiers can create avoidable costs.
+
+StackSpend provides a simple way to audit AI spending and discover potential savings.
+
+---
+
+## Features
+
+### AI Spend Auditing
+
+Analyze AI subscriptions and calculate:
+
+- Current monthly spend
+- Potential monthly savings
+- Potential annual savings
+
+### Recommendation Engine
+
+Generate transparent, rule-based recommendations for:
+
+- Plan downgrades
+- Team plan optimization
+- Enterprise plan evaluation
+- Subscription consolidation opportunities
+
+### AI Executive Summary
+
+Generate a concise executive summary explaining:
+
+- Spend efficiency
+- Optimization opportunities
+- Annual savings impact
+- Recommended actions
+
+### Public Reports
+
+Every audit generates a unique shareable URL:
+
+```txt
+/reports/[publicId]
+```
+
+Users can share reports with team members and stakeholders.
+
+### Audit History
+
+View previously generated audits and reports.
+
+### Copy Share Link
+
+One-click sharing for generated reports.
+
+### Print / Save PDF
+
+Generate PDF versions of reports using browser-native print functionality.
+
+### Lead Capture
+
+Collect contact information after users receive audit value.
+
+### Honeypot Protection
+
+Basic spam prevention for lead submissions.
+
+### Automated Testing
+
+Recommendation and savings logic covered through automated tests.
+
+### CI/CD Validation
+
+GitHub Actions automatically validate builds and tests on every push.
+
+---
+
+## Supported Tools
+
+### ChatGPT
+
+- Free
+- Go
+- Plus
+- Pro
+- Pro Max
+- Business
+- Enterprise
+
+### Claude
+
+- Free
+- Pro
+- Max 5x
+- Max 20x
+- Team Standard
+- Team Premium
+- Enterprise
+
+### Cursor
+
+- Hobby
+- Pro
+- Pro+
+- Ultra
+- Teams
+- Enterprise
+
+### GitHub Copilot
+
+- Pro
+- Pro+
+- Business
+- Enterprise
+
+### Gemini
+
+- AI Plus
+- AI Pro
+- Ultra 5x
+- Ultra 20x
+
+### Windsurf
+
+- Free
+- Pro
+- Teams
+- Max
+- Enterprise
+
+### APIs
+
+- OpenAI API
+- Anthropic API
 
 ---
 
@@ -28,128 +179,9 @@ https://your-deployed-url.vercel.app
 
 ![Public Report](./screenshots/public-report.png)
 
----
-
-## Features
-
-### AI Subscription Audit
-
-Analyze spending across popular AI tools:
-
-- ChatGPT
-- Claude
-- Cursor
-- GitHub Copilot
-- Gemini
-
-For each tool users can provide:
-
-- Subscription plan
-- Monthly spend
-- Number of seats
-
-Additional inputs:
-
-- Team size
-- Primary use case
-  - Coding
-  - Writing
-  - Research
-  - Data
-  - Mixed
-
----
-
-### Dynamic Pricing Engine
-
-Pricing is maintained centrally through a dedicated pricing data layer.
-
-Features:
-
-- Automatic plan pricing
-- Centralized pricing configuration
-- Multi-tool support
-- Consistent savings calculations
-
----
-
-### Recommendation Engine
-
-The audit engine evaluates:
-
-- Whether a user is paying for an oversized plan
-- Potential downgrade opportunities
-- Cost-saving alternatives
-- Monthly and annual savings potential
-
-Recommendations are generated through deterministic business rules rather than AI-generated calculations.
-
----
-
-### Savings Analysis
-
-Automatically calculates:
-
-- Current monthly spend
-- Potential monthly savings
-- Potential annual savings
-
----
-
-### AI Generated Summary
-
-Generates a personalized executive summary explaining:
-
-- Current spending profile
-- Optimization opportunities
-- Savings impact
-- Recommended actions
-
-Includes graceful fallback handling if the AI provider is unavailable.
-
----
-
-### Shareable Public Reports
-
-Every audit receives a unique public URL.
-
-Example:
-
-```txt
-/reports/cmcz123abc456
-```
-
-Reports are publicly shareable while excluding personally identifiable information.
-
----
-
 ### Audit History
 
-Users can review previously generated reports and revisit recommendations.
-
----
-
-### Lead Capture
-
-Collects:
-
-- Email address
-- Company name
-- Role
-
-Stored in PostgreSQL for future communication and consultation opportunities.
-
----
-
-### Email Delivery
-
-Generated reports can be delivered directly via email using Resend.
-
----
-
-### Abuse Protection
-
-Lead capture forms include a honeypot field to block basic automated spam submissions without affecting legitimate users.
+![Audit History](./screenshots/audit-history.png)
 
 ---
 
@@ -157,34 +189,38 @@ Lead capture forms include a honeypot field to block basic automated spam submis
 
 ### Frontend
 
-- Next.js App Router
-- React
+- Next.js 16
+- React 19
 - Tailwind CSS
 - React Hook Form
-- Zod
 
 ### Backend
 
 - Next.js Route Handlers
-
-### Database
-
-- PostgreSQL 16
 - Prisma ORM
-- Docker
+- PostgreSQL
 
 ### AI
 
-- OpenRouter
+- OpenRouter API
 - GPT-4o Mini
+- AI-generated audit summaries
 
 ### Email
 
 - Resend
 
+### Validation
+
+- Zod
+
 ### Testing
 
 - Vitest
+
+### Deployment
+
+- Vercel
 
 ### CI/CD
 
@@ -192,38 +228,161 @@ Lead capture forms include a honeypot field to block basic automated spam submis
 
 ---
 
-## Project Structure
+## Architecture
+
+### Audit Flow
 
 ```txt
-app/
-├── api/
-│   ├── audits/
-│   ├── leads/
-│   ├── summary/
-│   └── send-report/
-│
-├── reports/
-│   └── [id]/
-│
-components/
-│   ├── spend-form.jsx
-│   ├── report-actions.jsx
-│   └── ...
-│
-lib/
-│   ├── audit-engine.js
-│   ├── pricing-data.js
-│   ├── recommendation-rules.js
-│   ├── prisma.js
-│   └── schema.js
-│
-tests/
-│   └── audit-engine.test.js
+User Input
+    ↓
+Audit Engine
+    ↓
+Recommendation Rules
+    ↓
+Savings Calculation
+    ↓
+AI Summary Generation
+    ↓
+Database Persistence
+    ↓
+Public Report URL
 ```
+
+### Recommendation Engine
+
+Recommendations are generated using deterministic business rules.
+
+Example:
+
+```txt
+ChatGPT Pro Max
+        ↓
+ChatGPT Pro
+        ↓
+$100 Monthly Savings
+```
+
+Benefits:
+
+- Predictable behavior
+- Explainable recommendations
+- Easier testing
+- No AI hallucinations in financial calculations
+
+AI is only responsible for generating natural-language summaries.
 
 ---
 
-## Local Setup
+## AI Implementation
+
+StackSpend uses OpenRouter with GPT-4o Mini to generate concise audit summaries.
+
+AI is used exclusively for explanation and report writing.
+
+All savings calculations, optimization logic, and recommendations are generated through deterministic business rules to ensure reliability, transparency, and testability.
+
+---
+
+## Test Cases
+
+### Test Case 1 — ChatGPT Business Optimization
+
+Input:
+
+- Tool: ChatGPT
+- Plan: Business
+- Seats: 1
+
+Expected:
+
+- Recommendation: Business → Plus
+- Monthly savings generated
+
+Result:
+
+Passed
+
+---
+
+### Test Case 2 — ChatGPT Pro Optimization
+
+Input:
+
+- Tool: ChatGPT
+- Plan: Pro
+- Seats: 1
+
+Expected:
+
+- Recommendation: Pro → Plus
+- Monthly savings = $80
+
+Result:
+
+Passed
+
+---
+
+### Test Case 3 — Optimized Stack Detection
+
+Input:
+
+- Tool: ChatGPT
+- Plan: Plus
+- Seats: 1
+
+Expected:
+
+- No recommendations
+- Stack marked as optimized
+
+Result:
+
+Passed
+
+---
+
+### Test Case 4 — Multi-Tool Spend Calculation
+
+Input:
+
+- ChatGPT Plus
+- GitHub Copilot Pro
+
+Expected:
+
+- Monthly spend equals combined subscription cost
+
+Result:
+
+Passed
+
+---
+
+### Test Case 5 — Annual Savings Calculation
+
+Input:
+
+- Monthly savings generated by recommendations
+
+Expected:
+
+- Annual savings = Monthly savings × 12
+
+Result:
+
+Passed
+
+---
+
+## Local Development
+
+### Clone Repository
+
+```bash
+git clone https://github.com/YOUR_USERNAME/stackspend.git
+cd stackspend
+```
 
 ### Install Dependencies
 
@@ -231,40 +390,14 @@ tests/
 bun install
 ```
 
-### Configure Environment Variables
+### Environment Variables
 
-Create:
-
-```txt
-.env.local
-```
-
-Example:
+Create a `.env` file:
 
 ```env
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/stackspend
-
-OPENROUTER_API_KEY=your_openrouter_key
-
-RESEND_API_KEY=your_resend_key
-```
-
-### Start PostgreSQL
-
-```bash
-docker compose up -d
-```
-
-### Push Database Schema
-
-```bash
-bunx prisma db push
-```
-
-### Generate Prisma Client
-
-```bash
-bunx prisma generate
+DATABASE_URL=
+OPENROUTER_API_KEY=
+RESEND_API_KEY=
 ```
 
 ### Run Development Server
@@ -273,115 +406,143 @@ bunx prisma generate
 bun run dev
 ```
 
-Open:
+Application:
 
 ```txt
 http://localhost:3000
 ```
 
----
-
-## Running Tests
-
-Run audit engine tests:
+### Run Tests
 
 ```bash
 bun run test
 ```
 
-Run linting:
+### Run Linting
 
 ```bash
 bun run lint
 ```
 
----
+### Production Build
 
-## Audit Workflow
-
-```txt
-User Input
-↓
-Pricing Engine
-↓
-Recommendation Engine
-↓
-Savings Calculation
-↓
-AI Summary Generation
-↓
-PostgreSQL Storage
-↓
-Public Report URL
-↓
-Optional Email Delivery
+```bash
+bun run build
 ```
 
 ---
 
-## Key Decisions
+## Design Decisions
 
-### 1. Rule-Based Audit Engine Instead of AI Calculations
+### Deterministic Recommendations
 
-Savings calculations and recommendations are generated using deterministic pricing rules. Cost optimization logic must remain predictable and explainable. AI is only used for summary generation.
+Financial recommendations should be transparent and predictable.
 
-### 2. Public Report IDs Instead of Sequential Database IDs
+Business rules were used instead of AI-generated calculations to improve:
 
-Reports use generated public IDs rather than database primary keys. This prevents report enumeration and allows safe public sharing.
+- Reliability
+- Consistency
+- Explainability
+- Testability
 
-### 3. PostgreSQL + Prisma Instead of Supabase
+### Public Report IDs
 
-The project originally used Supabase but was migrated to PostgreSQL with Prisma ORM for greater schema control and simpler relationship management.
+Reports use public identifiers instead of sequential database IDs.
 
-### 4. LocalStorage Persistence
+Benefits:
 
-Form state is automatically saved to localStorage. Users can refresh the page without losing audit progress.
+- Better security
+- Improved sharing experience
+- Reduced enumeration risk
 
-### 5. OpenRouter For LLM Integration
+### Browser-Based PDF Export
 
-OpenRouter provides access to multiple AI models through a single API while keeping integration simple and vendor-agnostic.
+PDF exports use browser-native print functionality.
 
----
+Benefits:
 
-## Tradeoffs
-
-### Authentication Deferred
-
-The MVP focuses on generating value before requiring user accounts. Reports remain publicly accessible through shareable URLs.
-
-### Static Pricing Data
-
-Pricing information is maintained manually rather than synchronized from vendor APIs. This simplifies implementation while preserving audit accuracy.
-
-### Rules Before Machine Learning
-
-Recommendations rely on transparent business rules instead of AI-generated suggestions. This improves consistency and makes savings calculations auditable.
+- No additional server-side infrastructure
+- Fast implementation
+- Broad browser compatibility
 
 ---
 
 ## Future Improvements
 
-- User authentication
+### Authentication
+
+- User accounts
+- Saved audits
 - Team workspaces
-- Usage analytics
-- Dynamic pricing synchronization
-- PDF report export
-- Organization dashboards
-- Alternative vendor recommendations
-- Benchmarking against industry averages
+- Role-based permissions
+
+### Usage-Based Recommendations
+
+Recommendations based on:
+
+- API consumption
+- Token usage
+- Message volume
+- Seat utilization
+
+### Analytics Dashboard
+
+- Historical spend trends
+- Savings tracking
+- Vendor comparison reporting
+
+### Automated Pricing Updates
+
+Reduce manual maintenance through automated pricing verification workflows.
 
 ---
 
-## Assignment Notes
+## Documentation
 
-This project was built as part of the Credex Web Development Internship Assignment.
+Additional project documentation:
 
-Focus areas:
+- ARCHITECTURE.md
+- REFLECTION.md
+- USER_INTERVIEWS.md
+- TESTS.md
+- PROMPTS.md
+- GTM.md
+- ECONOMICS.md
+- METRICS.md
+- LANDING_COPY.md
+- PRICING_DATA.md
 
-- Product thinking
-- Cost optimization
-- AI integration
-- User experience
-- Full-stack engineering
-- Shareable reports
-- Lead generation workflows
+---
+
+## Project Status
+
+Current Status:
+
+**MVP Complete**
+
+Implemented:
+
+- AI spend auditing
+- Recommendation engine
+- AI-generated summaries
+- Public reports
+- Audit history
+- Email delivery
+- Lead capture
+- PDF export
+- Automated testing
+- CI/CD validation
+
+---
+
+## Author
+
+**Akshay Deepak Pawar**
+
+Full-Stack Developer
+
+GitHub:
+https://github.com/YOUR_USERNAME
+
+LinkedIn:
+https://linkedin.com/in/YOUR_PROFILE

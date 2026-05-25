@@ -9,39 +9,29 @@ datasource db {
 
 model Audit {
   id                  Int      @id @default(autoincrement())
-
   publicId            String   @unique @default(cuid())
-
   report              Json
-
   summary             String?
-
   totalMonthlySavings Int
   totalAnnualSavings  Int
-
   createdAt           DateTime @default(now())
-
-  tools Tool[]
+  tools               Tool[]
 }
 
 model Tool {
-  id String @id @default(cuid())
-
+  id           String @id @default(cuid())
   tool         String
   plan         String
   monthlySpend Int
   seats        Int
-
-  auditId Int
-  audit   Audit @relation(fields: [auditId], references: [id], onDelete: Cascade)
+  auditId      Int
+  audit        Audit  @relation(fields: [auditId], references: [id], onDelete: Cascade)
 }
 
 model Lead {
   id        String   @id @default(cuid())
-
   email     String
   company   String?
   role      String?
-
   createdAt DateTime @default(now())
 }
