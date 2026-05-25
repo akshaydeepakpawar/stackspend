@@ -127,3 +127,96 @@ Plan for tomorrow:
 * Add user authentication with Clerk.
 * Introduce dashboard analytics for historical audits and savings trends.
 * Prepare the application for deployment and production testing.
+
+## Day 5 — 2026-05-24
+
+**Hours worked:** 6
+
+**What I did:**
+- Implemented lead capture functionality with optional company name and role fields.
+- Added backend storage for leads using Prisma and PostgreSQL.
+- Integrated transactional email delivery for audit confirmations.
+- Implemented honeypot-based abuse protection and documented the approach.
+- Added Open Graph and Twitter Card metadata for shareable report URLs.
+- Improved report page responsiveness and mobile layout.
+- Added conditional messaging for optimized stacks versus high-savings opportunities.
+- Performed manual testing of lead capture, report sharing, and email workflows.
+
+**What I learned:**
+- Learned how Open Graph metadata improves link sharing experiences on social platforms.
+- Better understood server-side form handling and validation in Next.js.
+- Learned practical techniques for lightweight spam prevention without degrading user experience.
+
+**Blockers / what I'm stuck on:**
+- Faced metadata generation issues when creating dynamic report pages.
+- Encountered email delivery edge cases caused by invalid or missing environment variables.
+- Spent time validating public report privacy requirements to ensure emails and company details were never exposed.
+
+**Plan for tomorrow:**
+- Add automated tests for the audit engine.
+- Configure GitHub Actions CI pipeline.
+- Prepare architecture, testing, and pricing documentation.
+- Run Lighthouse audits and improve performance where necessary.
+
+---
+
+## Day 6 — 2026-05-25
+
+**Hours worked:** 7
+
+**What I did:**
+- Added automated tests covering recommendation generation, savings calculations, and optimization scenarios.
+- Configured Vitest as the testing framework.
+- Created GitHub Actions workflow to run linting and tests on every push to the main branch.
+- Fixed failing test cases after updating pricing assumptions and recommendation logic.
+- Refactored parts of the audit engine to improve maintainability and readability.
+- Generated architecture diagrams and documented application data flow.
+- Created TESTS.md, PROMPTS.md, and PRICING_DATA.md.
+- Performed Lighthouse audits and optimized page structure, metadata, and accessibility.
+
+**What I learned:**
+- Learned how small pricing changes can impact downstream tests and recommendation calculations.
+- Improved understanding of CI pipelines and automated quality checks.
+- Learned how to design tests that verify business logic rather than implementation details.
+
+**Blockers / what I'm stuck on:**
+- Encountered test failures after updating pricing values.
+- Faced lint warnings related to React Hook Form integration and component optimization.
+- Spent time debugging CI failures caused by mismatched expectations in audit engine tests.
+
+**Plan for tomorrow:**
+- Complete remaining documentation files.
+- Finalize README screenshots and deployment instructions.
+- Perform full end-to-end testing on the deployed application.
+- Prepare final submission package.
+
+---
+
+## Day 7 — 2026-05-26
+
+**Hours worked:** 8
+
+**What I did:**
+- Finalized README documentation, screenshots, architecture notes, business strategy documents, and reflection answers.
+- Completed GTM, Economics, Metrics, Landing Copy, and User Interviews documentation.
+- Verified pricing sources and aligned recommendation logic with documented assumptions.
+- Completed production deployment and resolved database schema synchronization issues.
+- Performed comprehensive end-to-end testing on the deployed application.
+- Verified audit generation, AI summaries, report sharing, PDF export, lead capture, email delivery, and audit history functionality.
+- Ran final lint, build, and test checks to ensure release readiness.
+- Reviewed the project against the assignment rubric and addressed remaining gaps.
+
+**What I learned:**
+- Learned the importance of documentation quality and clear communication when presenting engineering work.
+- Better understood the relationship between product thinking, business viability, and technical implementation.
+- Learned how deployment, testing, documentation, and user experience collectively determine product quality.
+
+**Blockers / what I'm stuck on:**
+- Encountered deployment issues caused by database schema mismatches between local development and production environments.
+- Resolved migration and Prisma synchronization issues by rebuilding and validating the production database schema.
+- No major blockers remained after final testing.
+
+**Plan for tomorrow:**
+- Submit the assignment.
+- Reflect on lessons learned throughout the project.
+- Prepare for potential Round 2 requirements and technical discussions.
