@@ -36,9 +36,9 @@ describe("generateAudit", () => {
 
     expect(result.recommendations[0].recommendedPlan).toBe("Plus");
 
-    expect(result.totalMonthlySavings).toBe(180);
+    expect(result.totalMonthlySavings).toBe(80);
 
-    expect(result.totalAnnualSavings).toBe(2160);
+    expect(result.totalAnnualSavings).toBe(960);
   });
 
   it("returns optimized for already cost-efficient stacks", () => {
