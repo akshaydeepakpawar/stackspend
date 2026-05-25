@@ -14,12 +14,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  // metadataBase: new URL("https://your-domain.vercel.app"),
+
   title: "StackSpend",
   description: "Analyze AI subscriptions and discover hidden savings.",
 
   openGraph: {
     title: "StackSpend",
     description: "Analyze AI subscriptions and discover hidden savings.",
+    url: "https://your-domain.vercel.app",
+    siteName: "StackSpend",
     type: "website",
   },
 

@@ -2,6 +2,40 @@ import { prisma } from "@/lib/prisma";
 import ReportActions from "@/components/report-actions";
 import Link from "next/link";
 
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+
+  const audit = await prisma.audit.findUnique({
+    where: {
+      publicId: id,
+    },
+  });
+
+  if (!audit) {
+    return {
+      title: "Report Not Found | StackSpend",
+    };
+  }
+
+  return {
+    title: `Save $${audit.totalMonthlySavings}/month | StackSpend Audit`,
+
+    description: `This AI spend audit identified potential savings of $${audit.totalMonthlySavings}/month and $${audit.totalAnnualSavings}/year.`,
+
+    openGraph: {
+      title: `Save $${audit.totalMonthlySavings}/month`,
+      description: `Potential annual savings: $${audit.totalAnnualSavings}`,
+      type: "article",
+    },
+
+    twitter: {
+      card: "summary_large_image",
+      title: `Save $${audit.totalMonthlySavings}/month`,
+      description: `Potential annual savings: $${audit.totalAnnualSavings}`,
+    },
+  };
+}
+
 export default async function ReportPage({ params }) {
   const { id } = await params;
 
@@ -133,7 +167,7 @@ export default async function ReportPage({ params }) {
         </div>
       </section>
       <ReportActions />
-      <section className="mt-16 rounded-xl bg-black text-white p-8 text-center">
+      <section className="print:hidden mt-16 rounded-xl bg-black text-white p-8 text-center">
         <h2 className="text-2xl font-bold">Audit Another AI Stack</h2>
 
         <p className="mt-2 text-gray-300">
@@ -141,7 +175,10 @@ export default async function ReportPage({ params }) {
           opportunities.
         </p>
 
-        <Link href="/" className="...">
+        <Link
+          href="/"
+          className="inline-block mt-4 rounded bg-white text-black px-5 py-3 font-medium"
+        >
           Start New Audit
         </Link>
       </section>
