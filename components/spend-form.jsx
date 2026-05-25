@@ -288,11 +288,11 @@ export default function SpendForm() {
                     {...register(`tools.${index}.tool`)}
                     className="w-full rounded border border-gray-300 bg-white p-2 text-sm"
                   >
-                    <option>ChatGPT</option>
-                    <option>Claude</option>
-                    <option>Cursor</option>
-                    <option>GitHub Copilot</option>
-                    <option>Gemini</option>
+                    {Object.keys(PRICING).map((tool) => (
+                      <option key={tool} value={tool}>
+                        {tool}
+                      </option>
+                    ))}
                   </select>
                 </label>
 
@@ -404,14 +404,14 @@ export default function SpendForm() {
           </div>
 
           {/* CTA block */}
-          
+
           {auditResult.totalMonthlySavings > 500 && (
             <div className="rounded-2xl border border-green-200 bg-green-50 p-6">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div>
                   <h3 className="text-2xl font-bold text-green-900">
-                    You&#39;re Leaving ${auditResult.totalMonthlySavings}/Month on
-                    the Table
+                    You&#39;re Leaving ${auditResult.totalMonthlySavings}/Month
+                    on the Table
                   </h3>
 
                   <p className="mt-2 text-green-800">
@@ -439,9 +439,9 @@ export default function SpendForm() {
               </h3>
 
               <p className="mt-2 text-blue-800">
-                We didn&#39;t identify any major opportunities to reduce costs right
-                now. Leave your email and we&#39;ll notify you if new optimization
-                opportunities become available for your stack.
+                We didn&#39;t identify any major opportunities to reduce costs
+                right now. Leave your email and we&#39;ll notify you if new
+                optimization opportunities become available for your stack.
               </p>
             </div>
           )}
