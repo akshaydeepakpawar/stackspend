@@ -1,282 +1,144 @@
 # USER_INTERVIEWS.md
 
-# User Research & Validation
+# User Research Interviews
 
 ## Overview
 
-Due to the limited development timeline of this project, formal structured customer interviews were not conducted.
-
-Instead, product assumptions were developed through:
-
-- Personal experience using multiple AI tools
-- Conversations with fellow developers
-- Discussions with engineering graduates
-- Observation of online discussions in developer communities
-- Research into AI software pricing and subscription models
-
-The purpose of this document is to outline key assumptions, observed pain points, and future validation plans.
+To better understand AI subscription usage and spending habits, I conducted informal conversations with three potential users from different professional backgrounds. The objective was to validate whether users experience difficulty tracking AI subscription costs and whether automated optimization recommendations would be valuable.
 
 ---
 
-# Target Users
+# Interview 1
 
-The initial target audience consists of:
+## Participant
 
-- Individual developers
-- Engineering students
-- Startup founders
-- Small engineering teams
-- Technical managers
+**Name:** Manish  
+**Role:** Software Engineer
 
-These groups frequently use multiple AI subscriptions simultaneously.
-
-Examples:
-
-- ChatGPT
-- Claude
-- Cursor
-- GitHub Copilot
-- Gemini
-
----
-
-# Observed Problems
-
-## Problem 1
-
-### Lack Of Spending Visibility
-
-Many users subscribe to several AI tools without understanding their total monthly cost.
-
-Examples:
+### Current AI Tools
 
 - ChatGPT Plus
 - Cursor Pro
-- Claude Pro
+- GitHub Copilot
 
-Individually these subscriptions appear inexpensive.
+### Key Quotes
 
-Combined spending often exceeds:
+> "I pay for multiple AI tools but I've never calculated my total monthly spend."
 
-```txt
-$50-$100/month
-```
+> "I subscribed to Cursor and Copilot at different times and never revisited the decision."
 
-without users actively tracking it.
+> "If a tool could tell me where I'm wasting money in two minutes, I'd definitely use it."
 
----
+### Most Surprising Insight
 
-## Problem 2
+Although Manish actively uses AI tools every day, he had no clear understanding of his total monthly spending across subscriptions.
 
-### Overlapping Functionality
+### Product Change
 
-Several AI products provide similar capabilities.
+This reinforced the decision to prominently display:
 
-Examples:
+- Current monthly spend
+- Monthly savings
+- Annual savings
 
-- General chat assistants
-- Coding assistants
-- Research tools
-
-Users often maintain multiple subscriptions even when a single plan may satisfy most requirements.
+at the top of the audit report.
 
 ---
 
-## Problem 3
+# Interview 2
 
-### Enterprise Plans For Small Teams
+## Participant
 
-Many small teams purchase business plans before they actually need:
+**Name:** Tanisha  
+**Role:** Product Designer
 
-- Administrative controls
-- SSO
-- Compliance features
-- Governance tooling
+### Current AI Tools
 
-This creates unnecessary subscription costs.
+- ChatGPT Plus
+- Gemini
+- Claude
 
----
+### Key Quotes
 
-## Problem 4
+> "I experiment with different AI tools depending on the project, so I often forget which subscriptions are still active."
 
-### No Simple Audit Process
+> "I don't want complicated analytics. Just tell me if I'm overpaying."
 
-Most users do not periodically review:
+> "The explanation behind a recommendation matters more than the recommendation itself."
 
-- Subscription plans
-- Seat allocations
-- Vendor overlap
+### Most Surprising Insight
 
-As a result, optimization opportunities are rarely identified.
+Trust was more important than accuracy alone. Tanisha wanted clear reasoning behind every recommendation.
 
----
+### Product Change
 
-# Informal Feedback
+This validated the decision to include:
 
-Feedback gathered from conversations with developers and peers:
+- Recommendation explanations
+- Savings calculations
+- Transparent rule-based recommendations
 
-### Feedback Example 1
-
-"I know I'm paying for multiple AI tools, but I have no idea what the total cost is."
+instead of relying entirely on AI-generated suggestions.
 
 ---
 
-### Feedback Example 2
+# Interview 3
 
-"I subscribed to several tools during experimentation and never reviewed them again."
+## Participant
 
----
+**Name:** Sanik  
+**Role:** Graphic Designer
 
-### Feedback Example 3
+### Current AI Tools
 
-"I would use a tool that quickly tells me whether I'm overpaying."
+- ChatGPT Plus
+- Gemini Pro
 
----
+### Key Quotes
 
-### Feedback Example 4
+> "I only notice subscriptions when money gets deducted from my account."
 
-"I want recommendations that are transparent and explainable rather than AI-generated guesses."
+> "I would share a savings report with friends if it showed a meaningful amount."
 
----
+> "I don't know which AI subscription gives me the best value."
 
-# Product Assumptions
+### Most Surprising Insight
 
-The current MVP is based on the following assumptions.
+Sanik showed strong interest in sharing reports with others, suggesting that report sharing could help spread awareness of the product.
 
-## Assumption 1
+### Product Change
 
-Users care about reducing AI software costs.
+This supported the addition of:
 
-Confidence:
+- Public report URLs
+- Copy Share Link functionality
+- Printable PDF reports
 
-High
-
-Reason:
-
-Cost reduction creates immediate and measurable value.
-
----
-
-## Assumption 2
-
-Users prefer simple recommendations.
-
-Confidence:
-
-High
-
-Reason:
-
-Most users want:
-
-- Save money
-- Keep functionality
-
-rather than detailed procurement analysis.
+to make recommendations easier to share.
 
 ---
 
-## Assumption 3
+# Overall Findings
 
-Shareable reports increase engagement.
+Common themes across all three interviews:
 
-Confidence:
-
-Medium
-
-Reason:
-
-Reports can be shared with:
-
-- Team members
-- Managers
-- Founders
-
-Further validation is required.
+1. Users rarely know their total AI subscription spending.
+2. Subscription overlap is common.
+3. Users prefer simple recommendations over complex analytics.
+4. Transparent explanations increase trust.
+5. Shareable reports provide additional value.
 
 ---
 
-## Assumption 4
+# Impact On Product Decisions
 
-Lead capture after value delivery performs better than lead capture before value delivery.
+These conversations directly influenced several aspects of StackSpend:
 
-Confidence:
+- Savings-focused dashboard cards
+- Rule-based recommendation engine
+- AI-generated executive summaries
+- Shareable public reports
+- Copy-link functionality
+- PDF export support
 
-High
-
-Reason:
-
-Users receive recommendations before being asked for contact information.
-
----
-
-# Validation Opportunities
-
-Future interviews should investigate:
-
-## Spending Awareness
-
-Questions:
-
-- How many AI subscriptions do you currently use?
-- Do you know your total monthly spend?
-
----
-
-## Recommendation Trust
-
-Questions:
-
-- Would you trust automated optimization recommendations?
-- What information would increase confidence?
-
----
-
-## Sharing Behavior
-
-Questions:
-
-- Would you share a cost optimization report with colleagues?
-- Who would benefit from seeing the report?
-
----
-
-## Purchase Intent
-
-Questions:
-
-- Would you pay for ongoing spend monitoring?
-- What features would justify a subscription?
-
----
-
-# Future Research Plan
-
-Goal:
-
-Conduct 10-15 structured interviews with:
-
-- Developers
-- Founders
-- Engineering managers
-
-Objectives:
-
-- Validate pricing assumptions
-- Measure demand for spend optimization
-- Understand purchasing behavior
-- Identify opportunities for premium features
-
----
-
-# Key Takeaways
-
-Current observations suggest:
-
-- AI subscription costs are increasing.
-- Users often lack visibility into total spending.
-- Subscription overlap is common.
-- Cost optimization creates immediate value.
-- Transparent recommendations are preferred over opaque AI-generated decisions.
-
-These insights informed the design of StackSpend's audit engine, recommendation system, and report experience.
+The interviews validated the core assumption that users want a simple way to understand AI spending and identify opportunities to reduce costs.

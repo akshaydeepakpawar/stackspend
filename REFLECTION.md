@@ -2,254 +2,120 @@
 
 # Project Reflection
 
-## Overview
+## 1. What was the hardest bug you encountered and how did you debug it?
 
-StackSpend was built as an AI subscription auditing platform that helps individuals and teams identify unnecessary spending on AI tools and discover optimization opportunities.
+The hardest bug involved form persistence and localStorage synchronization.
 
-The project combines rule-based cost analysis, AI-generated summaries, public report sharing, lead capture, and email delivery into a single product experience.
+I wanted users to be able to refresh the page without losing their audit progress. Initially, I saved form values to localStorage using React Hook Form's `watch()` function and restored them when the page loaded. However, every refresh reset the form back to the default values instead of restoring the saved data.
 
-Throughout development, the focus was not only on implementing features but also on understanding the tradeoffs involved in building a real SaaS product.
+After several rounds of debugging, I added extensive console logging and discovered that the save effect was executing before the restoration logic had completed. The default form values were being written to localStorage immediately after page load, overwriting the previously saved state.
 
----
+To fix this, I refactored the implementation to use `useWatch()` for specific fields and carefully controlled the order of restoration and persistence. I also added safeguards around initialization to prevent unwanted writes during hydration.
 
-# What Went Well
-
-## Rule-Based Audit Engine
-
-One of the strongest decisions was separating cost calculations from AI-generated content.
-
-Savings calculations and recommendations are fully deterministic.
-
-Benefits:
-
-- Predictable behavior
-- Easier testing
-- Explainable recommendations
-- No risk of AI hallucinating financial data
-
-AI is only used to generate natural language summaries.
-
-This architecture proved significantly more reliable than attempting to use an LLM for financial calculations.
+This bug taught me the importance of understanding component lifecycle timing and state synchronization in React applications.
 
 ---
 
-## Dynamic Pricing Architecture
+## 2. Describe a decision you reversed during development.
 
-Moving pricing information into a dedicated pricing layer simplified recommendation logic.
+One significant decision I reversed was using Supabase as the primary backend solution.
 
-Benefits:
+At the beginning of development I planned to use Supabase for database storage and backend functionality because it provided many features out of the box. As the application grew and I introduced public report IDs, audit relationships, lead capture, and more complex queries, I found myself wanting greater control over the schema and database interactions.
 
-- Easy maintenance
-- Centralized pricing updates
-- Cleaner audit engine implementation
-- Better separation of concerns
+I ultimately migrated the project to PostgreSQL with Prisma ORM.
 
-This also made automated testing much easier.
+The migration required additional effort, including schema redesign, Prisma configuration, and query refactoring, but it improved maintainability, type safety, and development experience.
 
----
-
-## Public Report Sharing
-
-Using public report identifiers instead of sequential database IDs was a valuable architectural decision.
-
-Benefits:
-
-- Improved security
-- Better user experience
-- Easier sharing
-- Reduced risk of report enumeration
+Looking back, Prisma was the better long-term choice for this project.
 
 ---
 
-## Incremental Development
+## 3. If you had one additional week, what would you build?
 
-Building features in small iterations reduced complexity and simplified debugging.
+If I had another week to continue development, I would focus on four major improvements:
 
-Examples:
+### Authentication and User Accounts
 
-- Audit generation
-- Report rendering
-- AI summaries
-- Email delivery
-- Lead capture
-- Test automation
+Allow users to create accounts, save audits permanently, and manage report history across devices.
 
-Each feature could be validated independently before moving forward.
+### Usage-Based Recommendations
 
----
+Instead of only analyzing subscription plans, recommendations would also consider:
 
-# Challenges Encountered
-
-## Database Migration
-
-The project initially explored a Supabase-based approach before transitioning fully to PostgreSQL and Prisma.
-
-Challenges:
-
-- Schema changes
-- Relationship modeling
-- Data consistency
-- Prisma client regeneration
-
-Although time-consuming, the migration provided better control over application data.
-
----
-
-## React Hook Form State Management
-
-Managing dynamic tool arrays introduced several challenges.
-
-Issues encountered:
-
-- Form reactivity
-- Dynamic field updates
-- Pricing synchronization
-- Form restoration after refresh
-
-The solution involved:
-
-- useWatch
-- useFieldArray
-- replace()
-- Local storage persistence
-
-This significantly improved the user experience.
-
----
-
-## Local Storage Synchronization
-
-A subtle bug caused saved values to be overwritten by default values during page initialization.
-
-Root cause:
-
-- Save effects executed before restoration completed.
-
-Resolution:
-
-- Added initialization guards
-- Controlled hydration timing
-- Improved restoration logic
-
-This was one of the most valuable debugging experiences during development.
-
----
-
-## CI/CD Integration
-
-GitHub Actions initially failed because of ESLint violations that were not visible during normal development.
-
-Issues included:
-
-- Unused variables
-- Invalid navigation components
-- JSX formatting rules
-
-Resolving these problems improved code quality and highlighted the importance of automated validation.
-
----
-
-# What I Would Improve With More Time
-
-## Authentication
-
-Currently reports are publicly accessible through shareable URLs.
-
-Future improvements:
-
-- User accounts
-- Saved workspaces
-- Team collaboration
-- Role-based permissions
-
----
-
-## Usage-Based Recommendations
-
-Current recommendations are based on subscription plans and team size.
-
-Future versions could incorporate:
-
-- Actual API consumption
+- API consumption
 - Message volume
-- Token usage
 - Seat utilization
+- Actual product usage
 
-This would produce more accurate optimization recommendations.
+This would significantly improve recommendation accuracy.
 
----
+### Analytics Dashboard
 
-## Automated Pricing Updates
+Provide users with:
 
-Pricing data is currently maintained manually.
-
-Future improvements:
-
-- Automated verification workflows
-- Vendor integrations
-- Scheduled pricing validation
-
-This would reduce maintenance overhead and improve long-term accuracy.
-
----
-
-## Analytics Dashboard
-
-Future versions could provide:
-
-- Historical spend trends
+- Historical spending trends
 - Savings tracking
+- Subscription changes over time
 - Team-level reporting
-- Vendor comparison dashboards
+
+### Automated Pricing Updates
+
+Currently pricing information is maintained manually. I would build a pricing synchronization workflow and administrative interface to simplify updates as vendor pricing changes.
 
 ---
 
-# Key Lessons Learned
+## 4. How did you use AI tools during development? When was AI wrong?
 
-## Deterministic Logic Matters
+AI tools played an important role throughout development.
 
-AI is excellent at explanation but should not always be responsible for business-critical calculations.
+I used ChatGPT primarily for:
 
-Separating calculations from summaries improved reliability and testability.
+- Brainstorming architecture ideas
+- Debugging React and Next.js issues
+- Reviewing Prisma schema design
+- Generating documentation drafts
+- Exploring alternative implementation approaches
+
+However, I intentionally avoided relying on AI for business-critical calculations.
+
+All savings calculations and recommendations in StackSpend are generated through deterministic rules rather than AI-generated outputs because financial recommendations must remain predictable and auditable.
+
+One example where AI was wrong involved the localStorage persistence bug. An AI-generated solution suggested a state restoration pattern that appeared reasonable but still caused saved data to be overwritten by default values during initialization. The code looked correct but failed in practice.
+
+The issue was only resolved through manual debugging, console logging, and careful observation of React Hook Form behavior.
+
+This reinforced an important lesson: AI is extremely helpful for accelerating development, but developers must still verify assumptions and understand the underlying implementation.
 
 ---
 
-## Documentation Is Part Of Engineering
+## 5. Self Assessment
 
-Writing architecture documents, pricing references, tests, and workflow documentation revealed design weaknesses that were not obvious during implementation.
+### Discipline: 8/10
 
-Documentation improved the project itself.
+I maintained consistent progress throughout the project and worked through multiple debugging sessions without abandoning difficult problems. I could improve by planning development milestones more formally before implementation.
 
----
+### Code Quality: 8/10
 
-## Product Thinking Matters
+The application is modular, uses Prisma for database access, React Hook Form for validation, and includes automated tests and CI checks. There is still room to improve component abstraction and test coverage.
 
-The most valuable improvements were not always technical.
+### Design Sense: 7/10
 
-Examples:
+The interface is clean, responsive, and functional. However, more time could be spent on visual polish, branding, animations, and accessibility improvements.
 
-- Shareable reports
-- Draft persistence
-- Public URLs
-- Email delivery
-- Credex consultation CTA
+### Problem Solving: 9/10
 
-These features improve usability and business value more than purely technical additions.
+Several technical challenges required significant debugging and architectural adjustments, including localStorage persistence, dynamic form state management, Prisma migrations, CI failures, and report generation. I consistently worked through these issues and identified practical solutions.
+
+### Entrepreneurial Thinking: 8/10
+
+Beyond building features, I considered business value through lead capture, shareable reports, consultation opportunities, pricing strategy, unit economics, and go-to-market planning. Future work would include additional customer validation and deeper market research.
 
 ---
 
 # Final Thoughts
 
-Building StackSpend provided experience across:
+Building StackSpend provided practical experience across frontend development, backend engineering, database design, AI integration, testing, CI/CD, documentation, and product thinking.
 
-- Frontend development
-- Backend development
-- Database design
-- AI integration
-- Testing
-- CI/CD
-- Product design
+The most valuable lesson from this project was that successful products require balancing technical implementation with user value and business objectives. Features such as shareable reports, draft persistence, recommendation transparency, and lead capture ultimately contributed as much to the product as the underlying technical architecture.
 
-The project reinforced the importance of balancing engineering quality, user experience, and business objectives when building software products.
-
-If continued beyond the assignment, the next focus would be authentication, usage-based optimization, analytics, and automated pricing maintenance.
+If continued beyond the assignment, my next priorities would be authentication, usage-based optimization, analytics dashboards, and broader customer validation through user interviews.
