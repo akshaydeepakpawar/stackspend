@@ -177,6 +177,10 @@ GitHub Actions automatically validate builds and tests on every push.
 
 ![Audit History](./screenshots/audit-history.png)
 
+## Lighthouse Audit
+
+![Lighthouse Audit](./screenshots/lighthouse-audit.png)
+
 ---
 
 ## Tech Stack
