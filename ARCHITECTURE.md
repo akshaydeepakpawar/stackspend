@@ -344,6 +344,43 @@ Checks:
 This prevents regressions before deployment.
 
 ---
+# Why This Stack
+
+## Next.js
+
+Chosen because it provides:
+
+- Server Components
+- API routes
+- SSR support
+- Easy Vercel deployment
+
+This reduced complexity by allowing frontend and backend logic to live in a single codebase.
+
+## PostgreSQL + Prisma
+
+Chosen because:
+
+- Strong relational modeling
+- Type-safe queries
+- Excellent developer experience
+- Easy future scaling
+
+## OpenRouter
+
+Chosen because:
+
+- Single API integration
+- Access to multiple frontier models
+- Easy provider switching
+
+## Tailwind CSS
+
+Chosen because:
+
+- Rapid UI development
+- Consistent design system
+- Small bundle size
 
 # Scalability Considerations
 

@@ -6,13 +6,7 @@ StackSpend helps developers, founders, and teams analyze AI subscription costs, 
 
 Application:
 
-https://your-domain.vercel.app
-
-Example Public Report:
-
-https://your-domain.vercel.app/reports/example-id
-
-> Replace with production URLs after deployment.
+https://stackspend-kappa.vercel.app/
 
 ---
 
@@ -380,7 +374,7 @@ Passed
 ### Clone Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/stackspend.git
+git clone https://github.com/akshaydeepakpawar/stackspend.git
 cd stackspend
 ```
 
@@ -535,6 +529,28 @@ Implemented:
 
 ---
 
+## Decisions
+
+### 1. Deterministic Audit Engine Instead of AI-Based Recommendations
+
+I chose rule-based recommendation logic for savings calculations instead of relying on LLM outputs. Financial recommendations must be predictable, testable, and explainable. AI is only used for generating summaries.
+
+### 2. PostgreSQL + Prisma Instead of Supabase-Only Logic
+
+I initially explored simpler backend approaches but moved to PostgreSQL with Prisma for stronger type safety, clearer schema management, and better scalability as the application grew.
+
+### 3. No Authentication in MVP
+
+The assignment explicitly prioritizes speed and usability. Requiring login would add friction and reduce audit completion rates, so audits can be generated immediately without creating an account.
+
+### 4. Browser-Based PDF Export Instead of Server-Side PDF Generation
+
+I used native browser print-to-PDF functionality because it is reliable, lightweight, and avoids introducing additional infrastructure and rendering complexity.
+
+### 5. Public Shareable Reports Using Public IDs
+
+Reports use generated public IDs rather than sequential database IDs. This improves privacy, prevents easy enumeration of reports, and creates cleaner shareable URLs.
+
 ## Author
 
 **Akshay Deepak Pawar**
@@ -542,7 +558,10 @@ Implemented:
 Full-Stack Developer
 
 GitHub:
-https://github.com/YOUR_USERNAME
+https://github.com/akshaydeepakpawar
 
 LinkedIn:
-https://linkedin.com/in/YOUR_PROFILE
+https://www.linkedin.com/in/akshay-pawar-5b4b5819a/
+
+LeetCode:
+https://leetcode.com/u/akshay_deepak_pawar/

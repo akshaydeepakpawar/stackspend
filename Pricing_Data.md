@@ -212,3 +212,11 @@ https://github.com/features/copilot/plans
 
 Google Gemini Pricing
 https://gemini.google/subscriptions
+
+## Implementation Note
+
+The StackSpend MVP uses a simplified pricing model within the application for recommendation generation and testing consistency.
+
+Certain enterprise plans and usage-based products are represented using fixed values inside `lib/pricing-data.js` to simplify calculations and improve explainability.
+
+The official vendor pricing tables in this document are intended as reference material, while application recommendations are generated from the pricing configuration bundled with the application.

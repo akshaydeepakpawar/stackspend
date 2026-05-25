@@ -336,3 +336,25 @@ Why this metric?
 - Supports business growth
 
 The more money users save, the more value StackSpend creates.
+
+# Instrumentation
+
+Metrics will be collected using:
+
+- Vercel Analytics
+- Database audit events
+- Lead submissions
+- Report generation logs
+
+---
+
+# Pivot Threshold
+
+The product should be reconsidered if:
+
+- Audit completion rate remains below 30%
+- Email capture remains below 5%
+- Average savings identified falls below $10 per audit
+- Fewer than 10% of users view recommendations
+
+These thresholds would indicate insufficient user value and require changes to positioning, onboarding, or recommendation quality.
